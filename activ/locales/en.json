@@ -1,0 +1,165 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "search": "Search...",
+    "all": "All",
+    "viewProfile": "View Profile →",
+    "applyNow": "Apply Now",
+    "noResults": "No results found",
+    "egp": "EGP"
+  },
+
+  "nav": {
+    "home": "Home",
+    "coaches": "Coaches",
+    "sports": "Sports",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "logout": "Logout"
+  },
+
+  "workout": {
+    "title": "Workouts",
+    "allLevels": "All Levels",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "minutes": "min",
+    "slots": "slots",
+    "book": "Book Now",
+    "noSlots": "No Slots Available"
+  },
+
+  "coaches": {
+    "badge": "Meet Our Team",
+    "title": "Our Expert",
+    "titleHighlight": "Coaches",
+    "subtitle": "Professional, certified coaches dedicated to helping you achieve your athletic goals",
+    "loadingText": "Loading coaches...",
+    "clickDetails": "Click for details",
+    "rating": "Rating",
+    "years": "Years",
+    "students": "Students",
+    "certs": "Certs",
+    "viewProfile": "View Profile →",
+    "noCoaches": "No coaches found",
+    "noCoachesHint": "Try selecting a different sport category",
+    "joinTitle": "Want to Join Our Team?",
+    "joinSubtitle": "We're always looking for passionate, certified coaches to join our academy",
+    "applyNow": "Apply Now",
+    "sports": {
+      "all": "All Coaches",
+      "swimming": "Swimming",
+      "gymnastics": "Gymnastics",
+      "martialArts": "Martial Arts"
+    },
+    "defaultTitle": "Professional Coach",
+    "defaultBio": "Dedicated coach with years of experience in training athletes."
+  },
+
+  "sports": {
+    "title": "Our",
+    "titleHighlight": "Sports Programs",
+    "subtitle": "Discover our programs designed for all ages",
+    "searchPlaceholder": "Search for sports...",
+    "categories": {
+      "all": "All Sports",
+      "kungFu": "Kung Fu",
+      "swimming": "Swimming",
+      "gymnastics": "Gymnastics"
+    },
+    "coach": "Coach",
+    "date": "Date",
+    "time": "Time",
+    "age": "Age",
+    "all": "All",
+    "price": "EGP/month",
+    "location": "Location",
+    "category": "Category"
+  },
+
+  "payment": {
+    "methods": {
+      "card": "Visa / Mastercard",
+      "wallet": "E-Wallet",
+      "receipt": "Manual Transfer"
+    },
+    "card": {
+      "title": "Card Number",
+      "placeholder": "0000 0000 0000 0000",
+      "name": "Name on Card",
+      "namePlaceholder": "Name as it appears on the card",
+      "expiry": "Expiry Date",
+      "cvv": "CVV",
+      "defaultName": "Your Name Here"
+    },
+    "wallet": {
+      "title": "Wallet Number",
+      "placeholder": "01xxxxxxxxx",
+      "hint": "A confirmation code will be sent to your number"
+    },
+    "receipt": {
+      "bank": "Bank Name",
+      "bankValue": "Bank Misr",
+      "account": "Account Number",
+      "amount": "Amount",
+      "uploadLabel": "Upload Receipt",
+      "dragHint": "Drag file here or click to select",
+      "sizeHint": "PNG, JPG, PDF — max 5MB",
+      "fileSelected": "File selected",
+      "reviewNote": "Receipt will be reviewed within 24 hours"
+    },
+    "submit": "Pay Now",
+    "processing": "Processing...",
+    "currency": "EGP",
+    "success": {
+      "title": "Payment Successful! 🎉",
+      "receiptNote": "Receipt uploaded, will be reviewed within 24 hours",
+      "generalNote": "Thank you, we will contact you shortly"
+    }
+  },
+
+  "cancel": {
+    "title": "Payment Cancelled"
+  },
+
+  "success": {
+    "title": "Payment Successful! 🎉"
+  },
+
+  "admin": {
+    "tabs": {
+      "sports": "Sports",
+      "bookings": "Bookings",
+      "coaches": "Coaches"
+    }
+  },
+
+  "adminLogin": {
+    "title": "Admin Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Log In",
+    "error": "Invalid username or password"
+  },
+
+  "aiAnalyzer": {
+    "title": "AI Coach Analyst",
+    "subtitle": "Smart athlete analysis",
+    "uploadLabel": "Upload a Word file (.docx)",
+    "analyzeButton": "Start Analysis",
+    "analyzing": "Analyzing...",
+    "downloadPdf": "Download PDF",
+    "uploadError": "Please upload a Word file only",
+    "successToast": "Analysis complete 🔥",
+    "cards": {
+      "summary": "Personal Summary",
+      "medical": "Medical History",
+      "nutrition": "Nutritional Habits",
+      "psychological": "Psychological Plan",
+      "environment": "Environment",
+      "recommended": "Recommended Activities"
+    }
+  }
+}

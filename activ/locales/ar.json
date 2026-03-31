@@ -1,0 +1,165 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "search": "بحث...",
+    "all": "الكل",
+    "viewProfile": "عرض الملف الشخصي ←",
+    "applyNow": "قدّم الآن",
+    "noResults": "لا توجد نتائج",
+    "egp": "ج.م"
+  },
+
+  "nav": {
+    "home": "الرئيسية",
+    "coaches": "المدربون",
+    "sports": "الرياضات",
+    "about": "عن النادي",
+    "contact": "تواصل معنا",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج"
+  },
+
+  "workout": {
+    "title": "التمارين",
+    "allLevels": "جميع المستويات",
+    "beginner": "مبتدئ",
+    "intermediate": "متوسط",
+    "advanced": "متقدم",
+    "minutes": "دقيقة",
+    "slots": "أماكن",
+    "book": "احجز الآن",
+    "noSlots": "لا توجد أماكن متاحة"
+  },
+
+  "coaches": {
+    "badge": "تعرف على فريقنا",
+    "title": "مدربونا",
+    "titleHighlight": "المحترفون",
+    "subtitle": "مدربون محترفون ومعتمدون يسعون لمساعدتك على تحقيق أهدافك الرياضية",
+    "loadingText": "جاري تحميل المدربين...",
+    "clickDetails": "اضغط للتفاصيل",
+    "rating": "التقييم",
+    "years": "سنوات",
+    "students": "طلاب",
+    "certs": "شهادات",
+    "viewProfile": "عرض الملف الشخصي ←",
+    "noCoaches": "لا يوجد مدربون",
+    "noCoachesHint": "جرّب اختيار تصنيف رياضي مختلف",
+    "joinTitle": "هل تريد الانضمام لفريقنا؟",
+    "joinSubtitle": "نبحث دائمًا عن مدربين شغوفين ومعتمدين للانضمام إلى أكاديميتنا",
+    "applyNow": "قدّم الآن",
+    "sports": {
+      "all": "جميع المدربين",
+      "swimming": "سباحة",
+      "gymnastics": "جمباز",
+      "martialArts": "فنون قتالية"
+    },
+    "defaultTitle": "مدرب محترف",
+    "defaultBio": "مدرب متفانٍ بخبرة سنوات في تدريب الرياضيين."
+  },
+
+  "sports": {
+    "title": "برامجنا",
+    "titleHighlight": "الرياضية",
+    "subtitle": "اكتشف برامجنا المصممة لجميع الأعمار",
+    "searchPlaceholder": "ابحث عن رياضة...",
+    "categories": {
+      "all": "جميع الرياضات",
+      "kungFu": "كونغ فو",
+      "swimming": "سباحة",
+      "gymnastics": "جمباز"
+    },
+    "coach": "المدرب",
+    "date": "التاريخ",
+    "time": "الوقت",
+    "age": "العمر",
+    "all": "الجميع",
+    "price": "ج.م / شهر",
+    "location": "الموقع",
+    "category": "التصنيف"
+  },
+
+  "payment": {
+    "methods": {
+      "card": "فيزا / ماستركارد",
+      "wallet": "محفظة إلكترونية",
+      "receipt": "تحويل يدوي"
+    },
+    "card": {
+      "title": "رقم البطاقة",
+      "placeholder": "0000 0000 0000 0000",
+      "name": "الاسم على البطاقة",
+      "namePlaceholder": "الاسم كما هو على البطاقة",
+      "expiry": "تاريخ الانتهاء",
+      "cvv": "CVV",
+      "defaultName": "اسمك هنا"
+    },
+    "wallet": {
+      "title": "رقم المحفظة",
+      "placeholder": "01xxxxxxxxx",
+      "hint": "📨 هيتبعتلك كود تأكيد على رقمك"
+    },
+    "receipt": {
+      "bank": "اسم البنك",
+      "bankValue": "بنك مصر",
+      "account": "رقم الحساب",
+      "amount": "المبلغ",
+      "uploadLabel": "ارفع الإيصال",
+      "dragHint": "اسحب الملف هنا أو اضغط للاختيار",
+      "sizeHint": "PNG, JPG, PDF — حجم أقصى 5MB",
+      "fileSelected": "تم اختيار الملف",
+      "reviewNote": "تم رفع الإيصال، هيتم مراجعته خلال 24 ساعة"
+    },
+    "submit": "ادفع دلوقتي",
+    "processing": "⟳ جاري المعالجة...",
+    "currency": "ج.م",
+    "success": {
+      "title": "تم الدفع بنجاح! 🎉",
+      "receiptNote": "تم رفع الإيصال، هيتم مراجعته خلال 24 ساعة",
+      "generalNote": "شكراً ليك، هيتواصل معاك في أقرب وقت"
+    }
+  },
+
+  "cancel": {
+    "title": "تم إلغاء الدفع"
+  },
+
+  "success": {
+    "title": "تم الدفع بنجاح! 🎉"
+  },
+
+  "admin": {
+    "tabs": {
+      "sports": "الرياضات",
+      "bookings": "الحجوزات",
+      "coaches": "المدربون"
+    }
+  },
+
+  "adminLogin": {
+    "title": "تسجيل دخول المشرف",
+    "username": "اسم المستخدم",
+    "password": "كلمة المرور",
+    "submit": "دخول",
+    "error": "اسم المستخدم أو كلمة المرور غير صحيحة"
+  },
+
+  "aiAnalyzer": {
+    "title": "محلل المدرب الذكي",
+    "subtitle": "تحليل ذكي للاعبين",
+    "uploadLabel": "ارفع ملف Word بصيغة .docx",
+    "analyzeButton": "بدء التحليل",
+    "analyzing": "جاري التحليل...",
+    "downloadPdf": "تحميل PDF",
+    "uploadError": "ارفع ملف Word بس",
+    "successToast": "تم التحليل بنجاح 🔥",
+    "cards": {
+      "summary": "ملخص الحالة",
+      "medical": "التاريخ المرضي",
+      "nutrition": "العادات الغذائية",
+      "psychological": "الخطة النفسية",
+      "environment": "البيئة",
+      "recommended": "التوصيات"
+    }
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "sports": "Sports",
+    "book": "Book Now",
+    "testimonials": "Testimonials",
+    "contact": "Contact Us",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "hello": "Hello, {name}",
+    "myBookings": "My Bookings"
+  },
+  "coachesSection": {
+    "title": "Meet Our Expert Coaches",
+    "subtitle": "Professional, certified coaches ready to help you reach your athletic goals.",
+    "button": "Explore Coaches →"
+  },
+  "hero": {
+    "title": "Building confident champions for a stronger future.",
+    "getStarted": "Get Started",
+    "ourPrograms": "Our Programs"
+  },
+  "contact": {
+    "header": "Contact Us",
+    "subtext": "Get in touch with us and begin your athletic adventure",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "message": "Complaint Details",
+    "send": "Send Complaint",
+    "sending": "Sending...",
+    "success": "Complaint sent successfully."
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "subtitle": "What Our Clients Say",
+    "description": "Real experiences from parents and children who joined our family",
+    "happyVisitors": "Happy Visitors",
+    "happyFamilies": "Happy Families",
+    "averageRating": "Average Rating"
+  },
+  "footer": {
+    "footerHeading": "Stay in the loop, join your child’s active journey",
+    "footerDescription": "We help kids build confidence, discipline, and strength through fun and safe sports programs.",
+    "enrollButton": "Enroll Now",
+    "columns": {
+      "pages": [
+        "Home",
+        "About",
+        "Programs",
+        "Contact"
+      ],
+      "programs": [
+        "Sports Classes",
+        "Camps",
+        "Workshops",
+        "Private Training"
+      ],
+      "social": [
+        "Facebook",
+        "Whatsapp",
+        "Instagram"
+      ]
+    },
+    "bottomLeft": "© 2026 Active Academy. All rights reserved.",
+    "bottomRight": "Designed & built BY NTECH"
+  },
+  "owner": {
+    "sectionHeader": {
+      "preTitle": "Our Founder",
+      "title": "John Doe\nProfessional Athlete & Coach"
+    },
+    "subHeader": "Founder & Coach",
+    "mainTitle": "Leading the way\nin sports excellence",
+    "paragraphs": [
+      "John has over 20 years of experience in professional sports.",
+      "He is passionate about training the next generation of athletes."
+    ],
+    "credentials": [
+      "Olympic Gold Medalist",
+      "Certified Fitness Trainer",
+      "Sports Nutrition Expert"
+    ],
+    "stats": [
+      {
+        "label": "Players Trained",
+        "value": "1200+"
+      },
+      {
+        "label": "Years Experience",
+        "value": "20"
+      },
+      {
+        "label": "Certified Coaches",
+        "value": "15"
+      },
+      {
+        "label": "Countries Served",
+        "value": "8"
+      }
+    ],
+    "quote": "Success comes from discipline and passion.",
+    "quoteAuthor": "John Doe"
+  },
+  "aboutUs": {
+    "sectionLabel": "About Us",
+    "title": "Our Journey & Achievements",
+    "subtitle": "We aim to deliver excellence in every project we undertake.",
+    "journeyTitle": "Our Story",
+    "journeyParagraphs": [
+      "Founded in 2020, our company has rapidly grown to become a leader in the tech industry.",
+      "We focus on innovation, quality, and customer satisfaction in all our services."
+    ],
+    "features": [
+      {
+        "icon": "⭐",
+        "text": "High Quality Service"
+      },
+      {
+        "icon": "🚀",
+        "text": "Fast Delivery"
+      },
+      {
+        "icon": "💡",
+        "text": "Innovative Solutions"
+      }
+    ]
+  },
+  "adminDashboard": {
+    "sidebar": {
+      "overview": "Overview",
+      "sports": "Sports",
+      "bookings": "Bookings"
+    },
+    "buttons": {
+      "logout": "Logout"
+    },
+    "welcome": "Welcome, {name}",
+    "loading": "Loading..."
+  },
+  "recentBookings": {
+    "title": "Recent Bookings",
+    "noBookings": "No bookings yet.",
+    "headers": {
+      "userName": "User Name",
+      "age": "Age",
+      "userId": "User ID",
+      "activity": "Activity",
+      "coach": "Coach",
+      "date": "Date",
+      "time": "Time"
+    }
+  },
+  "statsGrid": {
+    "stats": [
+      {
+        "label": "Total Players",
+        "value": "120",
+        "icon": "👥"
+      },
+      {
+        "label": "Active Sports",
+        "value": "8",
+        "icon": "🏆"
+      },
+      {
+        "label": "New Bookings",
+        "value": "15",
+        "icon": "📩"
+      },
+      {
+        "label": "Revenue",
+        "value": "$4,200",
+        "icon": "💰"
+      }
+    ]
+  },
+  "admin": {
+    "title": "Manage Coaches",
+    "subtitle": "Add, edit, or remove coaches from your team",
+    "add": "Add New Coach",
+    "noCoaches": "No coaches yet",
+    "noCoachesDesc": "Click \"Add New Coach\" to add your first coach",
+    "years": "Years",
+    "students": "Students",
+    "rating": "Rating",
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+  "bookings": {
+    "title": "Bookings",
+    "user": "User",
+    "activity": "Activity",
+    "date": "Date",
+    "status": "Status",
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "loading": "Loading bookings...",
+    "pending": "pending",
+    "confirmed": "confirmed"
+  },
+  "activities": {
+    "add": "Add Activity",
+    "edit": "Edit Activity",
+    "name": "Activity Name",
+    "coach": "Coach",
+    "category": "Category",
+    "date": "Date",
+    "time": "Time",
+    "capacity": "Capacity",
+    "location": "Location",
+    "image": "Upload Image",
+    "submitAdd": "Add Activity",
+    "submitEdit": "Update Activity",
+    "existing": "Existing Activities",
+    "deleteConfirm": "Are you sure you want to delete this activity?",
+    "added": "Activity added!",
+    "updated": "Activity updated!",
+    "editBtn": "Edit",
+    "deleteBtn": "Delete"
+  },
+  "aiAnalyzer": {
+    "title": "AI Coach Analyst",
+    "subtitle": "Smart platform for analyzing player data and building development plans",
+    "steps": [
+      {
+        "label": "Download Template",
+        "sub": "Get the empty Word file"
+      },
+      {
+        "label": "Fill Data",
+        "sub": "Enter player info"
+      },
+      {
+        "label": "Upload & Analyze",
+        "sub": "Upload file for analysis"
+      }
+    ],
+    "upload": {
+      "hint": "Start by downloading the official template",
+      "download": "Download Template",
+      "drag": "Drag file here or click to upload",
+      "formats": "Supported format: .docx"
+    },
+    "buttons": {
+      "analyze": "Start Analysis",
+      "processing": "Processing...",
+      "downloadPdf": "Download PDF"
+    },
+    "loading": [
+      "Reading file and extracting text...",
+      "AI analyzing medical data...",
+      "Generating recommendations..."
+    ],
+    "toast": {
+      "success": "Analysis completed!",
+      "pdf": "Generating PDF...",
+      "pdfDone": "PDF downloaded successfully",
+      "error": "Unexpected error occurred",
+      "invalidFile": "Please upload a .docx file"
+    },
+    "resultTitle": "Analysis Report",
+    "cards": {
+      "personal_summary": "Summary",
+      "medical_history": "Medical History",
+      "nutritional_habits": "Nutrition",
+      "psychological_plan": "Psychological",
+      "environmental_factors": "Environment",
+      "recommended_activities": "Recommendations"
+    }
+  }
+}

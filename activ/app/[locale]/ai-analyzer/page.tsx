@@ -1,0 +1,209 @@
+"use client";
+
+import { useState, useCallback, useRef, ChangeEvent } from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+// ─── Types ───────────────────────────────────────────────
+interface AnalysisData {
+  personal_summary: string;
+  medical_history: string[];
+  nutritional_habits: string[];
+  psychological_plan: string[];
+  environmental_factors: string[];
+  recommended_activities: string[];
+}
+
+interface ToastState {
+  visible: boolean;
+  message: string;
+  type: "success" | "error" | "info";
+}
+
+// ─── Toast ───────────────────────────────────────────────
+function Toast({ toast }: { toast: ToastState }) {
+  if (!toast.visible) return null;
+
+  const colors = {
+    success: "bg-green-600",
+    error: "bg-red-600",
+    info: "bg-gray-700",
+  };
+
+  return (
+    <div className={`fixed top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-xl text-white shadow-lg z-50 ${colors[toast.type]}`}>
+      {toast.message}
+    </div>
+  );
+}
+
+// ─── Card ───────────────────────────────────────────────
+function Card({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-black/60 border border-red-900/40 rounded-2xl overflow-hidden hover:shadow-[0_0_25px_rgba(239,68,68,0.3)] transition-all">
+      <div className="px-5 py-3 border-b border-red-900/40 text-red-400 font-bold text-sm">
+        {title}
+      </div>
+      <div className="p-5 text-white/80 text-sm space-y-2">{children}</div>
+    </div>
+  );
+}
+
+// ─── Main ───────────────────────────────────────────────
+export default function AIAnalyzer() {
+  const [file, setFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<AnalysisData | null>(null);
+  const [toast, setToast] = useState<ToastState>({
+    visible: false,
+    message: "",
+    type: "success",
+  });
+
+  const printRef = useRef<HTMLDivElement>(null);
+
+  // Toast helper
+  const showToast = (msg: string, type: ToastState["type"] = "success") => {
+    setToast({ visible: true, message: msg, type });
+    setTimeout(() => setToast((t) => ({ ...t, visible: false })), 2500);
+  };
+
+  // Upload
+  const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (!f) return;
+
+    if (!f.name.endsWith(".docx")) {
+      showToast("ارفع ملف Word بس", "error");
+      return;
+    }
+
+    setFile(f);
+  };
+
+  // Analyze
+  const analyze = async () => {
+    if (!file) return;
+
+    setLoading(true);
+    setData(null);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error);
+
+      setData(result.data);
+      showToast("تم التحليل بنجاح 🔥");
+    } catch (err: any) {
+      showToast(err.message || "Error", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // PDF
+  const downloadPDF = async () => {
+    if (!printRef.current) return;
+
+    const canvas = await html2canvas(printRef.current, { scale: 2 });
+    const img = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF();
+    pdf.addImage(img, "PNG", 0, 0, 210, 295);
+    pdf.save("analysis.pdf");
+  };
+
+  return (
+    <>
+      <Toast toast={toast} />
+
+      <div className="min-h-screen bg-black text-white px-6 py-12">
+
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-black mb-2">AI Coach Analyst</h1>
+          <p className="text-white/50">تحليل ذكي للاعبين</p>
+        </div>
+
+        {/* Upload */}
+        <div className="bg-black/70 border border-red-900/40 p-8 rounded-3xl mb-6 text-center">
+          <input type="file" accept=".docx" onChange={handleFile} />
+
+          <button
+            onClick={analyze}
+            className="block mx-auto mt-6 px-8 py-3 bg-red-600 rounded-xl font-bold hover:bg-red-500 transition"
+          >
+            بدء التحليل
+          </button>
+        </div>
+
+        {/* Loading */}
+        {loading && (
+          <div className="text-center text-red-400 font-bold animate-pulse">
+            جاري التحليل...
+          </div>
+        )}
+
+        {/* Results */}
+        {data && (
+          <div className="mt-10 space-y-6" ref={printRef}>
+
+            <div className="grid md:grid-cols-2 gap-4">
+
+              <Card title="ملخص الحالة">
+                {data.personal_summary}
+              </Card>
+
+              <Card title="التاريخ المرضي">
+                {data.medical_history.map((i, idx) => (
+                  <p key={idx}>• {i}</p>
+                ))}
+              </Card>
+
+              <Card title="العادات الغذائية">
+                {data.nutritional_habits.map((i, idx) => (
+                  <p key={idx}>• {i}</p>
+                ))}
+              </Card>
+
+              <Card title="الخطة النفسية">
+                {data.psychological_plan.map((i, idx) => (
+                  <p key={idx}>• {i}</p>
+                ))}
+              </Card>
+
+              <Card title="البيئة">
+                {data.environmental_factors.map((i, idx) => (
+                  <p key={idx}>• {i}</p>
+                ))}
+              </Card>
+
+              <Card title="التوصيات">
+                {data.recommended_activities.map((i, idx) => (
+                  <p key={idx}>• {i}</p>
+                ))}
+              </Card>
+
+            </div>
+
+            <button
+              onClick={downloadPDF}
+              className="mt-6 px-6 py-3 bg-green-600 rounded-xl font-bold hover:bg-green-500"
+            >
+              تحميل PDF
+            </button>
+          </div>
+        )}
+
+      </div>
+    </>
+  );
+}
