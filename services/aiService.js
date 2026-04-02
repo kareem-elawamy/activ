@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from 'dotenv';
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const dotenv = require('dotenv');
 
 // تفعيل dotenv لقراءة الملف من الفولدر الرئيسي
 dotenv.config();
@@ -11,8 +11,8 @@ if (!process.env.GEMINI_API_KEY) {
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// تصدير الدالة بنظام ES Modules
-export const analyzeStudentData = async (rawText) => {
+// تصدير الدالة بنظام CommonJS
+exports.analyzeStudentData = async (rawText) => {
   try {
     // نستخدم موديل gemini-2.5-flash لسرعة الاستجابة
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // ملاحظة: تأكد من اسم الموديل المتاح حالياً هو 1.5 أو 2.0

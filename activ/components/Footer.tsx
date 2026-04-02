@@ -1,40 +1,39 @@
 'use client';
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import en from "../messages/en.json";
-import ar from "../messages/ar.json";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Star {
   x: number;
   y: number;
-  // أي props حقيقية تحتاجينها
 }
+
 interface FooterColumnProps {
   title: string;
-  links: Array<{
-    label: string;
-    href: string;
-  }>;
-}
-
-interface UltraFooterProps {
+  links: string[];
   lang?: "en" | "ar";
-  
 }
 
-export default function UltraFooter({ lang = "en" }: UltraFooterProps) {
+export default function UltraFooter() {
+  const { t, lang } = useTranslation();
   const footerRef = useRef<HTMLElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [stars, setStars] = useState<Star[]>([]);
 
-  const texts = lang === "ar" ? ar : en;
+  const footerHeading = String(t('footer.footerHeading'));
+  const footerDescription = String(t('footer.footerDescription'));
+  const enrollButton = String(t('footer.enrollButton'));
+  const bottomLeft = String(t('footer.bottomLeft'));
+  const bottomRight = String(t('footer.bottomRight'));
 
-  // … جميع التأثيرات (stars، mouse move) كما في النسخة السابقة
+  const pagesCol = t('footer.columns.pages') || [];
+  const programsCol = t('footer.columns.programs') || [];
+  const socialCol = t('footer.columns.social') || [];
 
   const columnsData = [
-    { title: lang === "ar" ? "الصفحات" : "Pages", links: texts.columns.pages },
-    { title: lang === "ar" ? "البرامج" : "Programs", links: texts.columns.programs },
-    { title: lang === "ar" ? "وسائل التواصل" : "Social Media", links: texts.columns.social }
+    { title: String(t('footer.columns.pagesTitle')), links: Array.isArray(pagesCol) ? pagesCol : [] },
+    { title: String(t('footer.columns.programsTitle')), links: Array.isArray(programsCol) ? programsCol : [] },
+    { title: String(t('footer.columns.socialTitle')), links: Array.isArray(socialCol) ? socialCol : [] }
   ];
 
   return (
@@ -43,7 +42,7 @@ export default function UltraFooter({ lang = "en" }: UltraFooterProps) {
 
       <div className="max-w-7xl mx-auto px-6 mb-24 relative z-10 text-center">
         <h2 className="text-4xl font-bold animate-bounce text-white drop-shadow-[0_0_20px_red]">
-          {texts.footerHeading}
+          {footerHeading}
         </h2>
       </div>
 
@@ -54,24 +53,24 @@ export default function UltraFooter({ lang = "en" }: UltraFooterProps) {
             <div className="flex items-center gap-3 cursor-pointer hover:scale-105 transition-transform duration-300">
               <img src="/assets/logo.png" alt="Logo" className="w-36 h-20 drop-shadow-[0_0_30px_red]" />
             </div>
-            <p className="text-white/80 max-w-sm mb-6">{texts.footerDescription}</p>
-            <Link href="/sports">
+            <p className="text-white/80 max-w-sm mb-6">{footerDescription}</p>
+            <Link href={`/${lang}/sports`}>
               <button className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-full font-semibold shadow-[0_0_25px_rgba(255,0,0,0.8)] hover:shadow-[0_0_40px_rgba(255,0,255,1)] transition-all duration-300">
-                {texts.enrollButton}
+                {enrollButton}
               </button>
             </Link>
           </div>
 
           {columnsData.map(col => (
-            <FooterColumn key={col.title} {...col} lang={lang} />
+            <FooterColumn key={col.title} {...col} lang={lang as "en" | "ar"} />
           ))}
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-red-800">
           <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/70">
-            <p>{texts.bottomLeft}</p>
-            <p>{texts.bottomRight}</p>
+            <p>{bottomLeft}</p>
+            <p>{bottomRight}</p>
           </div>
         </div>
       </div>
@@ -86,7 +85,7 @@ function FooterColumn({ title, links, lang }: FooterColumnProps) {
       <ul className="space-y-3 text-white/80">
         {links.map(link => (
           <li key={link} className="hover:text-pink-500 transition">
-            <Link href={`/${link.toLowerCase().replace(/\s+/g, "-")}`}>{link}</Link>
+            <Link href={`/${lang}/${link.toLowerCase().replace(/\s+/g, "-")}`}>{link}</Link>
           </li>
         ))}
       </ul>

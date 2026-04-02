@@ -5,18 +5,16 @@ import Link from "next/link";
 import en from "../messages/en.json";
 import ar from "../messages/ar.json";
 
-interface HeroSectionProps {
-  lang?: "en" | "ar";
-}
+import { useTranslation } from "@/hooks/useTranslation";
 
-const HeroSection = ({ lang = "en" }: HeroSectionProps) => {
-  const texts = lang === "ar" ? ar : en;
+const HeroSection = () => {
+  const { t, lang } = useTranslation();
 
   return (
     <section
       id="home"
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className="relative min-h-screen overflow-hidden flex items-center"
+      className="relative min-h-[90vh] overflow-hidden flex items-center"
     >
       {/* Video Background */}
       <video
@@ -31,22 +29,22 @@ const HeroSection = ({ lang = "en" }: HeroSectionProps) => {
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50 z-0 animate-pulse-slow"></div>
+      <div className="absolute inset-0 bg-black/60 z-0"></div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-8 py-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Hero Content */}
-        <div className="animate-slide-in-right">
-          <h1 className="text-5xl lg:text-7xl font-black leading-tight mb-6 bg-gradient-to-r from-white via-red-600 to-black bg-clip-text text-transparent animate-fade-in-up font-cairo drop-shadow-[0_0_20px_black]">
-            {texts.heroTitle}
+        <div className="animate-slide-in-right space-y-8">
+          <h1 className="text-5xl lg:text-7xl font-black leading-tight bg-gradient-to-r from-white via-red-500 to-red-800 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,0,0,0.8)]">
+            {t("hero.title")}
           </h1>
 
-          <div className="flex flex-wrap gap-4 mb-16 animate-fade-in-up">
+          <div className="flex flex-wrap gap-4">
             {/* Get Started */}
-            <Link href="/payment">
-              <button className="relative px-8 py-4 bg-red-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-[0_0_25px_red] hover:scale-105 hover:-translate-y-1 transition-all duration-500 cursor-pointer flex items-center gap-2 font-cairo overflow-hidden">
-                {texts.getStarted}
+            <Link href={`/${lang}/payment`}>
+              <button className="px-8 py-4 bg-red-600 text-white font-bold text-lg rounded-full shadow-lg hover:shadow-red-600/50 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                {t("hero.getStarted")}
                 <svg
-                  className="ml-2 transition-transform duration-500 group-hover:translate-x-2"
+                  className={`transition-transform duration-300 ${lang === 'ar' ? 'rotate-180' : ''}`}
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
@@ -56,14 +54,13 @@ const HeroSection = ({ lang = "en" }: HeroSectionProps) => {
                 >
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-500"></span>
               </button>
             </Link>
 
             {/* Our Programs */}
-            <Link href="/sports">
-              <button className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-full font-bold text-lg backdrop-blur-sm hover:bg-red-600 hover:text-white hover:border-red-600 hover:-translate-y-1 transition-all duration-500 cursor-pointer font-cairo">
-                {texts.ourPrograms}
+            <Link href={`/${lang}/sports`}>
+              <button className="px-8 py-4 bg-transparent text-white border-2 border-white rounded-full font-bold text-lg hover:bg-white hover:text-black transition-all duration-300">
+                {t("hero.ourPrograms")}
               </button>
             </Link>
           </div>

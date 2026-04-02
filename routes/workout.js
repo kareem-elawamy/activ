@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Workout = require("../models/Workout");
+const authMiddleware = require("../middleware/authMiddleware");
+const adminMiddleware = require("../middleware/adminMiddleware");
 
 // ✅ CREATE workout
-router.post("/", async (req, res) => {
+router.post("/", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
     const workout = new Workout(req.body);
     await workout.save();
@@ -37,17 +39,12 @@ router.get("/:id", async (req, res) => {
     console.log(err);
     res.status(500).json({ message: "Server error" });
   }
-  // 2️⃣ منع الحجز لو مفيش slots
-if (workout.slots <= 0) {
-  return res.status(400).json({ message: "No available slots for this workout" });
-}
-
 });
 
 // PUT تعديل تمرين
-router.put("/:id", async (req, res) => {
+router.put("/:id", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
-    const { name, description, duration, level, slots } = req.body;
+    const { name, description, duration, level, slots, coach, category, location, date, time, price, ageRange, image, icon } = req.body;
 
     const workout = await Workout.findById(req.params.id);
     if (!workout) {
@@ -55,11 +52,20 @@ router.put("/:id", async (req, res) => {
     }
 
     // تحديث الحقول لو موجودة في body
-    if (name) workout.name = name;
-    if (description) workout.description = description;
-    if (duration) workout.duration = duration;
-    if (level) workout.level = level;
-    if (slots) workout.slots = slots;
+    if (name !== undefined) workout.name = name;
+    if (description !== undefined) workout.description = description;
+    if (duration !== undefined) workout.duration = duration;
+    if (level !== undefined) workout.level = level;
+    if (slots !== undefined) workout.slots = slots;
+    if (coach !== undefined) workout.coach = coach;
+    if (category !== undefined) workout.category = category;
+    if (location !== undefined) workout.location = location;
+    if (date !== undefined) workout.date = date;
+    if (time !== undefined) workout.time = time;
+    if (price !== undefined) workout.price = price;
+    if (ageRange !== undefined) workout.ageRange = ageRange;
+    if (image !== undefined) workout.image = image;
+    if (icon !== undefined) workout.icon = icon;
 
     await workout.save();
     res.json({ message: "Workout updated successfully ✅", workout });
@@ -71,7 +77,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // 🗑️ DELETE workout
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
     const workout = await Workout.findByIdAndDelete(req.params.id);
 
@@ -86,7 +92,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-
 
 module.exports = router;

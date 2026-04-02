@@ -1,9 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
+import { useTranslation } from "@/hooks/useTranslation";
+import toast from "react-hot-toast";
 
 export default function ComplaintSection() {
+  const { t, lang } = useTranslation();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,39 +28,48 @@ export default function ComplaintSection() {
     setLoading(true);
 
     try {
-      await axios.post("/api/complaints", formData);
+      const apiUrl = typeof window === 'undefined'
+        ? (process.env.INTERNAL_API_URL || 'http://app:3000')
+        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+      await fetch(`${apiUrl}/api/complaints`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
       setSuccess(true);
       setFormData({ name: "", email: "", message: "" });
+      toast.success(String(t('complaint.success')));
     } catch (error) {
       console.error("Error submitting complaint", error);
+      toast.error(lang === 'ar' ? "حدث خطأ أثناء إرسال الشكوى" : "Failed to send complaint");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section className="bg-black py-20 px-4">
-      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-10">
+    <section className="bg-black py-20 px-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="max-w-2xl mx-auto bg-[#0d0d0d] border border-red-900/30 rounded-3xl shadow-[0_0_60px_rgba(220,38,38,0.08)] p-10">
         
-        <h2 className="text-3xl font-bold text-center text-black mb-3">
-          Submit a Complaint
+        <h2 className="text-3xl font-bold text-center text-white mb-3">
+          {String(t('complaint.title'))}
         </h2>
 
-        <p className="text-center text-gray-600 mb-8 text-sm">
-          If you faced any issue, please let us know and our team will contact you.
+        <p className="text-center text-white/50 mb-8 text-sm">
+          {String(t('complaint.subtitle'))}
         </p>
 
         {success && (
-          <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-6 text-sm text-center">
-            Complaint sent successfully.
+          <div className="bg-green-950/40 border border-green-800/50 text-green-400 p-3 rounded-xl mb-6 text-sm text-center">
+            {String(t('complaint.success'))}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-black">
-              Full Name
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('complaint.fullName'))}
             </label>
             <input
               type="text"
@@ -65,15 +77,15 @@ export default function ComplaintSection() {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 
-                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition"
-              placeholder="Enter your name"
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('complaint.namePlaceholder'))}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-black">
-              Email Address
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('complaint.email'))}
             </label>
             <input
               type="email"
@@ -81,15 +93,15 @@ export default function ComplaintSection() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 
-                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition"
-              placeholder="Enter your email"
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('complaint.emailPlaceholder'))}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2 text-black">
-              Complaint Details
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('complaint.message'))}
             </label>
             <textarea
               name="message"
@@ -97,19 +109,19 @@ export default function ComplaintSection() {
               onChange={handleChange}
               required
               rows="4"
-              className="w-full border border-gray-300 rounded-xl px-4 py-3 
-                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition"
-              placeholder="Describe your issue..."
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('complaint.messagePlaceholder'))}
             ></textarea>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-red-600 text-white py-3 rounded-xl font-semibold 
-                       hover:bg-red-700 transition duration-300"
+            className="w-full bg-gradient-to-r from-red-700 to-red-500 text-white py-3 rounded-xl font-bold
+                       hover:opacity-90 transition duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] disabled:opacity-50"
           >
-            {loading ? "Sending..." : "Send Complaint"}
+            {loading ? String(t('complaint.sending')) : String(t('complaint.send'))}
           </button>
 
         </form>

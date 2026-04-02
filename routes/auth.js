@@ -5,18 +5,25 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middleware/authMiddleware");
 
+// Password Regex: >= 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special character
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
 // REGISTER
 router.post("/register", async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
 
   try {
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character." });
+    }
+
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    user = new User({ name, email, password: hashedPassword, role: role || "user" });
+    user = new User({ name, email, password: hashedPassword, role: "user" });
     await user.save();
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -56,9 +63,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Protected route example
-router.get("/me", authMiddleware, (req, res) => {
-  res.json({ message: "Protected route works ✅", user: req.user });
+// GET logged-in user profile
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role, profilePic: user.profilePic } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // UPDATE profile
@@ -72,6 +86,9 @@ router.put("/update", authMiddleware, async (req, res) => {
     if (name) user.name = name;
 
     if (password) {
+      if (!passwordRegex.test(password)) {
+        return res.status(400).json({ message: "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character." });
+      }
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }

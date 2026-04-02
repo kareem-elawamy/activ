@@ -1,124 +1,121 @@
-'use client'; // لو Next 13+ مع App Router، ممكن تستخدم "app/ai-coach/page.jsx"
+'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
-export default function AiCoach() {
-  const [selectedFile, setSelectedFile] = useState(null);
+export default function ContactUs() {
+  const { t, lang } = useTranslation();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
   const [loading, setLoading] = useState(false);
-  const [analysisData, setAnalysisData] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const fileInputRef = useRef(null);
-
-  // ==== Toast ====
-  const showToast = (icon, message, type = 'success') => {
-    alert(message); // مؤقتًا، ممكن تحسني بالـ toast component
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ==== File Handlers ====
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file.name.endsWith('.docx')) {
-      showToast('fas fa-exclamation-circle', 'يرجى رفع ملف Word (.docx) فقط', 'error');
-      return;
-    }
-    setSelectedFile(file);
-  };
-
-  const removeFile = (e) => {
-    e.stopPropagation();
-    setSelectedFile(null);
-  };
-
-  const startAnalysis = async () => {
-    if (!selectedFile) return;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setLoading(true);
-    setAnalysisData(null);
-
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-
     try {
-      const res = await fetch('/api/analyze', { method: 'POST', body: formData });
-      const result = await res.json();
-      if (!res.ok) throw new Error(result.error || 'حدث خطأ في الخادم');
-      setAnalysisData(result.data);
-      showToast('fas fa-check-circle', 'تم التحليل بنجاح!', 'success');
-    } catch (err) {
-      showToast('fas fa-times-circle', err.message || 'حدث خطأ غير متوقع', 'error');
+      const apiUrl = typeof window === 'undefined'
+        ? (process.env.INTERNAL_API_URL || 'http://app:3000')
+        : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+      await fetch(`${apiUrl}/api/complaints`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      setSuccess(true);
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error('Error submitting contact form', error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="bg-black text-white min-h-screen font-cairo px-4 py-10">
-      <header className="text-center mb-12">
-        <div className="inline-flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center shadow-red-glow-sm">
-            <i className="fas fa-brain text-white text-xl"></i>
-          </div>
-          <span className="text-3xl font-black tracking-wide">AI Coach Analyst</span>
-        </div>
-        <p className="text-white/60 text-base">
-          منصة ذكية لتحليل بيانات اللاعبين وبناء خطط تطوير شاملة
+    <section className="bg-black py-20 px-4" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="max-w-2xl mx-auto bg-[#0d0d0d] border border-red-900/30 rounded-3xl shadow-[0_0_60px_rgba(220,38,38,0.08)] p-10">
+
+        <h2 className="text-3xl font-bold text-center text-white mb-3">
+          {String(t('contact.header'))}
+        </h2>
+
+        <p className="text-center text-white/50 mb-8 text-sm">
+          {String(t('contact.subtext'))}
         </p>
-      </header>
 
-      {/* Steps */}
-      <div className="flex items-center justify-center gap-0 mb-10">
-        {/* يمكنك تكرار نفس HTML للخطوات */}
+        {success && (
+          <div className="bg-green-950/40 border border-green-800/50 text-green-400 p-3 rounded-xl mb-6 text-sm text-center">
+            {String(t('contact.success'))}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('contact.fullName'))}
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('contact.fullName'))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('contact.email'))}
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('contact.email'))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2 text-white/60">
+              {String(t('contact.message'))}
+            </label>
+            <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
+              required
+              rows="4"
+              className="w-full border border-white/10 bg-white/[0.04] rounded-xl px-4 py-3 text-white
+                         focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 transition placeholder-white/20"
+              placeholder={String(t('contact.message'))}
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-red-700 to-red-500 text-white py-3 rounded-xl font-bold
+                       hover:opacity-90 transition duration-300 shadow-[0_0_20px_rgba(220,38,38,0.3)] disabled:opacity-50"
+          >
+            {loading ? String(t('contact.sending')) : String(t('contact.send'))}
+          </button>
+        </form>
       </div>
-
-      {/* Upload Card */}
-      <div className="bg-black/80 border-2 border-red-900/70 rounded-3xl p-8 shadow-red-glow mb-8 relative overflow-hidden">
-        <div
-          className="drop-zone border-2 border-dashed border-red-800/60 rounded-2xl p-10 text-center cursor-pointer"
-          onClick={() => fileInputRef.current.click()}
-        >
-          {!selectedFile && (
-            <div>
-              <i className="fas fa-cloud-upload-alt text-5xl text-red-500/70 mb-4 block"></i>
-              <h3 className="text-lg font-bold text-white/80 mb-1">
-                اسحب الملف هنا أو اضغط للرفع
-              </h3>
-              <p className="text-white/40 text-sm">صيغ الملفات المدعومة: .docx (Word)</p>
-            </div>
-          )}
-
-          {selectedFile && (
-            <div className="flex items-center justify-center gap-4">
-              <i className="fas fa-file-word text-4xl text-red-400"></i>
-              <span className="text-white font-bold text-base">{selectedFile.name}</span>
-              <button onClick={removeFile} className="w-8 h-8 rounded-full bg-red-900/60 flex items-center justify-center">
-                <i className="fas fa-times text-red-300 text-sm"></i>
-              </button>
-            </div>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".docx"
-            className="hidden"
-            onChange={handleFileChange}
-          />
-        </div>
-
-        <button
-          className="w-full py-4 bg-red-600 hover:bg-red-500 disabled:bg-red-900/40 text-white font-black text-lg rounded-2xl mt-6"
-          disabled={!selectedFile || loading}
-          onClick={startAnalysis}
-        >
-          {loading ? 'جاري التحليل...' : 'بدء التحليل الذكي'}
-        </button>
-      </div>
-
-      {/* Results */}
-      {analysisData && (
-        <div id="resultsContainer">
-          <h2 className="text-2xl font-black mb-4">تقرير التحليل</h2>
-          <pre className="bg-black/70 p-4 rounded-2xl">{JSON.stringify(analysisData, null, 2)}</pre>
-        </div>
-      )}
-    </div>
+    </section>
   );
 }

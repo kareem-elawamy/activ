@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
+import toast from 'react-hot-toast';
 
 interface BookButtonProps {
   activity: any;
-  lang?: 'ar' | 'en';
 }
 
 type Step = 'info' | 'payment-method' | 'upload-proof' | 'done';
@@ -21,7 +22,7 @@ const PAYMENT_INSTRUCTIONS = {
   },
   wallet: {
     ar: 'قم بالتحويل على المحفظة المختارة، ثم ارفع صورة التأكيد.',
-    en: 'Transfer to the selected wallet, then upload the confirmation screenshot.',
+    en: 'Transfer to the selected wallet, then upload your confirmation screenshot.',
   },
 };
 
@@ -32,96 +33,58 @@ const WALLET_NUMBERS: Record<string, string> = {
   we:       '015-XXXX-XXXX (WE Pay)',
 };
 
-const ar_txt = {
-  bookNow: 'احجز الآن',
-  booked: 'تم الحجز ✓',
-  pending: 'قيد المراجعة ⏳',
-  rejected: 'مرفوض ✕',
-  popupTitle: 'احجز نشاطك',
-  stepInfo: 'بياناتك',
-  stepPayment: 'طريقة الدفع',
-  stepProof: 'رفع الإثبات',
-  fullName: 'الاسم الكامل',
-  age: 'العمر',
-  nationalId: 'الرقم القومي',
-  phone: 'رقم الهاتف',
-  email: 'البريد (اختياري)',
-  next: 'التالي',
-  back: 'رجوع',
-  cancel: 'إلغاء',
-  fillAll: 'يرجى ملء جميع الحقول المطلوبة',
-  alreadyBooked: 'لقد قمت بحجز هذا النشاط من قبل',
-  chooseMethod: 'اختر طريقة الدفع',
-  receipt: 'إيصال من الأكاديمية',
-  instapay: 'تحويل InstaPay',
-  wallet: 'محفظة إلكترونية',
-  uploadProof: 'ارفع إثبات الدفع',
-  uploadHint: 'صورة واضحة للإيصال أو التحويل',
-  uploadFormats: 'JPG, PNG, PDF — حد أقصى 5 ميجا',
-  dragHere: 'اسحب الملف هنا أو انقر للاختيار',
-  submitting: 'جاري الإرسال...',
-  submit: 'أرسل الحجز',
-  successTitle: 'تم إرسال حجزك! 🎉',
-  successBody: 'سيتم مراجعة إثبات الدفع وتأكيد حجزك خلال 24 ساعة.',
-  viewBookings: 'عرض حجوزاتي',
-  close: 'إغلاق',
-  activity: 'النشاط',
-  name: 'الاسم',
-  method: 'طريقة الدفع',
-  instructions: 'تعليمات الدفع',
-  chooseWallet: 'اختر المحفظة',
-  priceNote: 'السعر يُحدَّد بعد مراجعة الأكاديمية',
-};
-
-const en_txt = {
-  bookNow: 'Book Now',
-  booked: 'Booked ✓',
-  pending: 'Under Review ⏳',
-  rejected: 'Rejected ✕',
-  popupTitle: 'Book Your Activity',
-  stepInfo: 'Your Info',
-  stepPayment: 'Payment',
-  stepProof: 'Upload Proof',
-  fullName: 'Full Name',
-  age: 'Age',
-  nationalId: 'National ID',
-  phone: 'Phone Number',
-  email: 'Email (optional)',
-  next: 'Next',
-  back: 'Back',
-  cancel: 'Cancel',
-  fillAll: 'Please fill all required fields',
-  alreadyBooked: 'You already booked this activity',
-  chooseMethod: 'Choose Payment Method',
-  receipt: 'Academy Receipt',
-  instapay: 'InstaPay Transfer',
-  wallet: 'E-Wallet',
-  uploadProof: 'Upload Payment Proof',
-  uploadHint: 'A clear photo of your receipt or transfer',
-  uploadFormats: 'JPG, PNG, PDF — max 5 MB',
-  dragHere: 'Drag file here or click to select',
-  submitting: 'Submitting...',
-  submit: 'Submit Booking',
-  successTitle: 'Booking Submitted! 🎉',
-  successBody: 'Your payment proof will be reviewed and booking confirmed within 24 hours.',
-  viewBookings: 'View My Bookings',
-  close: 'Close',
-  activity: 'Activity',
-  name: 'Name',
-  method: 'Payment Method',
-  instructions: 'Payment Instructions',
-  chooseWallet: 'Choose Wallet',
-  priceNote: 'Price is determined after academy review',
-};
-
-export default function BookButton({ activity, lang = 'ar' }: BookButtonProps) {
-  const t = lang === 'ar' ? ar_txt : en_txt;
+export default function BookButton({ activity }: BookButtonProps) {
+  const { lang, t: rawT } = useTranslation();
+  
+  const t = {
+    bookNow: String(rawT('bookNow.bookNow')),
+    booked: String(rawT('bookNow.booked')),
+    pending: String(rawT('bookNow.pending')),
+    rejected: String(rawT('bookNow.rejected')),
+    popupTitle: String(rawT('bookNow.popupTitle')),
+    stepInfo: String(rawT('bookNow.stepInfo')),
+    stepPayment: String(rawT('bookNow.stepPayment')),
+    stepProof: String(rawT('bookNow.stepProof')),
+    fullName: String(rawT('bookNow.fullName')),
+    age: String(rawT('bookNow.age')),
+    nationalId: String(rawT('bookNow.nationalId')),
+    phone: String(rawT('bookNow.phone')),
+    email: String(rawT('bookNow.email')),
+    next: String(rawT('bookNow.next')),
+    back: String(rawT('bookNow.back')),
+    cancel: String(rawT('bookNow.cancel')),
+    fillAll: String(rawT('bookNow.fillAll')),
+    alreadyBooked: String(rawT('bookNow.alreadyBooked')),
+    chooseMethod: String(rawT('bookNow.chooseMethod')),
+    receipt: String(rawT('bookNow.receipt')),
+    instapay: String(rawT('bookNow.instapay')),
+    wallet: String(rawT('bookNow.wallet')),
+    uploadProof: String(rawT('bookNow.uploadProof')),
+    uploadHint: String(rawT('bookNow.uploadHint')),
+    uploadFormats: String(rawT('bookNow.uploadFormats')),
+    dragHere: String(rawT('bookNow.dragHere')),
+    submitting: String(rawT('bookNow.submitting')),
+    submit: String(rawT('bookNow.submit')),
+    successTitle: String(rawT('bookNow.successTitle')),
+    successBody: String(rawT('bookNow.successBody')),
+    viewBookings: String(rawT('bookNow.viewBookings')),
+    close: String(rawT('bookNow.close')),
+    activity: String(rawT('bookNow.activity')),
+    name: String(rawT('bookNow.name')),
+    method: String(rawT('bookNow.method')),
+    instructions: String(rawT('bookNow.instructions')),
+    chooseWallet: String(rawT('bookNow.chooseWallet')),
+    priceNote: String(rawT('bookNow.priceNote')),
+    traineeName: String(rawT('bookNow.traineeName')),
+    parentName: String(rawT('bookNow.parentName')),
+    parentPhone: String(rawT('bookNow.parentPhone'))
+  };
 
   const [showPopup, setShowPopup] = useState(false);
   const [bookingStatus, setBookingStatus] = useState<string | null>(null); // null | 'pending' | 'approved' | 'rejected'
   const [step, setStep] = useState<Step>('info');
 
-  const [userInfo, setUserInfo] = useState({ fullName: '', age: '', nationalId: '', phone: '', email: '' });
+  const [userInfo, setUserInfo] = useState({ fullName: '', age: '', nationalId: '', phone: '', email: '', traineeName: '', parentName: '', parentPhone: '' });
   const [payMethod, setPayMethod] = useState<PayMethod>('');
   const [walletType, setWalletType] = useState<WalletType>('');
   const [proofFile, setProofFile] = useState<File | null>(null);
@@ -134,14 +97,25 @@ export default function BookButton({ activity, lang = 'ar' }: BookButtonProps) {
 
   // Check existing booking for this activity + user
   useEffect(() => {
-    const userId = localStorage.getItem('userId') || localStorage.getItem('nationalId');
-    if (!userId) return;
-    fetch(`/api/bookings?userId=${userId}`)
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    const apiUrl = typeof window === 'undefined' ? (process.env.INTERNAL_API_URL || 'http://app:3000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+    
+    fetch(`${apiUrl}/api/booking/my?_t=${Date.now()}`, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        },
+        cache: 'no-store'
+    })
       .then(r => r.json())
       .then(bookings => {
         if (!Array.isArray(bookings)) return;
-        const existing = bookings.find((b: any) => b.activityId === activity._id);
-        if (existing) setBookingStatus(existing.status);
+        const existing = bookings.find((b: any) => 
+               (b.workout?._id === activity._id) || (b.workout === activity._id)
+        );
+        if (existing) setBookingStatus(existing.status || 'pending');
       })
       .catch(() => {});
   }, [activity._id]);
@@ -163,7 +137,7 @@ export default function BookButton({ activity, lang = 'ar' }: BookButtonProps) {
 
   // ── Step navigation ────────────────────────────────────────────────────
   const goToPayment = () => {
-    if (!userInfo.fullName.trim() || !userInfo.nationalId.trim() || !userInfo.phone.trim()) {
+    if (!userInfo.fullName.trim() || !userInfo.nationalId.trim() || !userInfo.phone.trim() || !userInfo.traineeName.trim()) {
       setError(t.fillAll);
       return;
     }
@@ -195,48 +169,68 @@ export default function BookButton({ activity, lang = 'ar' }: BookButtonProps) {
     setError('');
 
     try {
-      // 1. Upload proof file
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error(lang === 'ar' ? 'يجب تسجيل الدخول لإتمام الحجز' : 'You must log in to book.');
+
+      const apiUrl = typeof window === 'undefined' ? (process.env.INTERNAL_API_URL || 'http://app:3000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+      const headers = { Authorization: `Bearer ${token}` };
+
+      // 1. Upload proof file secured
       const fd = new FormData();
       fd.append('file', proofFile);
-      const uploadRes = await fetch('/api/upload', { method: 'POST', body: fd });
+      const uploadRes = await fetch('/api/upload', { 
+        method: 'POST', 
+        headers, // Push token
+        body: fd 
+      });
       const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) throw new Error(uploadData.error || 'Upload failed');
+      if (!uploadRes.ok) throw new Error(uploadData.error || uploadData.message || 'Upload failed');
 
-      // 2. Create booking record
-      const bookingRes = await fetch('/api/bookings', {
+      // 2. Create Booking natively mapped
+      const bookingRes = await fetch(`${apiUrl}/api/booking`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...headers },
         body: JSON.stringify({
-          activityId: activity._id,
-          activityName: activity.name,
-          coach: activity.coach || '',
-          date: activity.date || '',
-          time: activity.time || '',
-          location: activity.location || '',
-          category: activity.category || '',
+          workoutId: activity._id,
+          date: activity.date || new Date().toISOString(),
           userFullName: userInfo.fullName,
-          userAge: userInfo.age,
-          userId: userInfo.nationalId,
           userPhone: userInfo.phone,
-          userEmail: userInfo.email,
+          nationalId: userInfo.nationalId,
+          traineeName: userInfo.traineeName,
+          parentName: userInfo.parentName,
+          parentPhone: userInfo.parentPhone,
           paymentMethod: payMethod,
-          walletType: walletType || null,
-          paymentStatus: 'proof_submitted',
-          proofUrl: uploadData.url,
-          proofFileName: uploadData.fileName,
+          walletType: walletType || undefined,
+          proofUrl: uploadData.url
         }),
       });
       const bookingData = await bookingRes.json();
-      if (!bookingRes.ok) throw new Error(bookingData.error || 'Booking failed');
+      if (!bookingRes.ok) throw new Error(bookingData.message || 'Booking already exists or creation failed');
 
-      // 3. Save userId to localStorage for future lookups
-      localStorage.setItem('userId', userInfo.nationalId);
+      // 3. Create Payment record mapped to Booking
+      const paymentRes = await fetch(`${apiUrl}/api/payment`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...headers },
+        body: JSON.stringify({
+           amount: activity.price ? parseFloat(activity.price) : 0,
+           method: payMethod,
+           receiptUrl: uploadData.url,
+           bookingId: bookingData._id
+        }),
+      });
+      const paymentData = await paymentRes.json();
+      if (!paymentRes.ok) throw new Error(paymentData.message || 'Payment submission failed');
+
+      // Sync local identity
+      if (userInfo.fullName) localStorage.setItem('userName', userInfo.fullName);
 
       setCreatedBookingId(bookingData._id);
       setBookingStatus('pending');
       setStep('done');
+      toast.success(t.successTitle);
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
+      toast.error(err.message || 'Something went wrong');
     } finally {
       setSubmitting(false);
     }
@@ -314,10 +308,13 @@ export default function BookButton({ activity, lang = 'ar' }: BookButtonProps) {
                   </div>
 
                   {[
+                    { key: 'traineeName', label: t.traineeName || (lang === 'ar' ? 'اسم المتدرب' : 'Trainee Name'), type: 'text', required: true },
                     { key: 'fullName', label: t.fullName, type: 'text', required: true },
+                    { key: 'parentName', label: t.parentName || (lang === 'ar' ? 'اسم ولي الأمر' : 'Parent Name'), type: 'text', required: false },
                     { key: 'age', label: t.age, type: 'number', required: false },
                     { key: 'nationalId', label: t.nationalId, type: 'text', required: true },
                     { key: 'phone', label: t.phone, type: 'tel', required: true },
+                    { key: 'parentPhone', label: t.parentPhone || (lang === 'ar' ? 'رقم هاتف ولي الأمر' : 'Parent Phone'), type: 'tel', required: false },
                     { key: 'email', label: t.email, type: 'email', required: false },
                   ].map(field => (
                     <div key={field.key}>
