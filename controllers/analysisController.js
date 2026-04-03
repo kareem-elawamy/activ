@@ -1,8 +1,8 @@
-import Analysis from '../models/Analysis.js';
-import * as aiService from '../Services/aiService.js'; 
-import * as fileParser from '../utils/fileParser.js';
+const Analysis = require('../models/Analysis.js');
+const aiService = require('../services/aiService.js'); 
+const fileParser = require('../utils/fileParser.js');
 
-export const analyzeFile = async (req, res) => {
+exports.analyzeFile = async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ success: false, error: "من فضلك قم برفع ملف." });

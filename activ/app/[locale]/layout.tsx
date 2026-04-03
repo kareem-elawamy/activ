@@ -1,12 +1,14 @@
 import { ReactNode } from 'react';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { Toaster } from 'react-hot-toast';
 import { redirect } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import ClientWrapper from '@/components/ClientWrapper';
 import { Inter } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import '../globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 interface LocaleLayoutProps {
@@ -26,11 +28,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <html lang={locale} dir={dir}>
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.className} antialiased bg-black text-white`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientWrapper>
+            <Toaster position="top-center" reverseOrder={false} />
             <Navbar />
-            {children}
+            <main className="pt-28 min-h-screen">
+              {children}
+            </main>
             <Footer />
           </ClientWrapper>
         </NextIntlClientProvider>

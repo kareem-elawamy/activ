@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-// Simple admin credentials — in production, use a proper auth system or env vars
-// Default: admin / admin123 (can be changed via environment variables)
-const ADMIN_USERNAME = process.env.NEXT_PUBLIC_ADMIN_USERNAME || "admin";
-const ADMIN_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
+import { useRouter, useParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function AdminLogin() {
   const router = useRouter();
+  const params = useParams();
+  const locale = params?.locale || "ar";
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -18,24 +17,35 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
 
-    const username = e.target.username.value.trim();
+    const email = e.target.email.value.trim();
     const password = e.target.password.value;
 
-    // Small delay to prevent brute-force feel
-    await new Promise(r => setTimeout(r, 400));
+    try {
+      const apiUrl = typeof window === 'undefined' ? (process.env.INTERNAL_API_URL || 'http://app:3000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
+      if (data.user?.role !== "admin") throw new Error("ليس لديك صلاحيات الدخول");
 
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       localStorage.setItem("isAdminLoggedIn", "true");
-      localStorage.setItem("adminName", username);
-      router.push(`/ar/admin`);
-    } else {
-      setError("اسم المستخدم أو كلمة المرور غير صحيحة");
+      localStorage.setItem("adminName", data.user.name);
+      localStorage.setItem("token", data.token);
+      toast.success("تم تسجيل الدخول بنجاح");
+      router.push(`/${locale}/admin`);
+    } catch(err) {
+      setError(err.message || "خطأ في الاتصال بالخادم");
+      toast.error(err.message || "خطأ في الاتصال بالخادم");
     }
     setLoading(false);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black" dir="rtl">
+    <div className="flex items-center justify-center min-h-screen bg-black" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <div className="bg-[#0d0d0d] border border-red-900/30 rounded-2xl p-10 w-full max-w-sm shadow-[0_0_60px_rgba(220,38,38,0.1)]">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -54,14 +64,14 @@ export default function AdminLogin() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-white/40 text-xs font-semibold block mb-1.5">اسم المستخدم</label>
+            <label className="text-white/40 text-xs font-semibold block mb-1.5">البريد الإلكتروني للادمن</label>
             <input
-              type="text"
-              name="username"
+              type="email"
+              name="email"
               required
-              autoComplete="username"
+              autoComplete="email"
               className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition placeholder-white/20"
-              placeholder="admin"
+              placeholder="admin@activ.com"
             />
           </div>
 
@@ -89,10 +99,6 @@ export default function AdminLogin() {
             )}
           </button>
         </form>
-
-        <p className="text-center text-white/15 text-xs mt-6">
-          بيانات الدخول الافتراضية: admin / admin123
-        </p>
       </div>
     </div>
   );

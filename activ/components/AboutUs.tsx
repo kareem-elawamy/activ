@@ -1,20 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import ar from "../messages/ar.json";
-import en from "../messages/en.json";
+import { useTranslation } from "@/hooks/useTranslation";
 
-interface AboutUsProps {
-  lang?: "ar" | "en"; // اللغة الافتراضية "en"
-}
+const AboutUs = () => {
+  const { t, lang } = useTranslation();
 
-const AboutUs: React.FC<AboutUsProps> = ({ lang = "en" }) => {
-  const texts = lang === "ar" ? ar.aboutUs : en.aboutUs;
+  const texts = {
+    sectionLabel: String(t('aboutUs.sectionLabel')),
+    title: String(t('aboutUs.title')),
+    subtitle: String(t('aboutUs.subtitle')),
+    journeyTitle: String(t('aboutUs.journeyTitle')),
+  };
+
+  const journeyParagraphs = t('aboutUs.journeyParagraphs') || [];
+  const features = t('aboutUs.features') || [];
 
   return (
     <section
       className="py-20 bg-black text-white overflow-hidden mt-13"
       id="about"
+      dir={lang === 'ar' ? 'rtl' : 'ltr'}
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
@@ -84,14 +90,14 @@ const AboutUs: React.FC<AboutUsProps> = ({ lang = "en" }) => {
               {texts.journeyTitle}
             </h3>
 
-            {texts.journeyParagraphs.map((p, idx) => (
+            {Array.isArray(journeyParagraphs) && journeyParagraphs.map((p, idx) => (
               <p key={idx} className="text-white/80 leading-relaxed mb-4">
                 {p}
               </p>
             ))}
 
             <ul className="space-y-4">
-              {texts.features.map((f, idx) => (
+              {Array.isArray(features) && features.map((f, idx) => (
                 <li key={idx} className="flex items-center gap-4 text-lg font-semibold">
                   <span className="text-2xl text-red-600">{f.icon}</span>
                   <span>{f.text}</span>

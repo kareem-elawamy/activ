@@ -2,16 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import ownerEn from "@/messages/en.json";
-import ownerAr from "@/messages/ar.json";
-
-/* ─── Types ─── */
-interface OwnerSectionProps {
-  lang?: "en" | "ar";
-}
+import { useTranslation } from "@/hooks/useTranslation";
 
 /* ─── tiny hook: triggers when element enters viewport ─── */
-function useInView(threshold: number = 0.15): [React.RefObject<HTMLDivElement>, boolean] {
+function useInView(threshold: number = 0.15): [React.RefObject<HTMLDivElement | null>, boolean] {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -54,7 +48,7 @@ function Counter({ to, suffix = "", duration = 2000 }: { to: number; suffix?: st
     return () => clearInterval(id);
   }, [visible, to, duration]);
 
-  return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
+  return <span ref={ref as React.RefObject<HTMLSpanElement>}>{count.toLocaleString()}{suffix}</span>;
 }
 
 /* ─── video modal ─── */
@@ -103,8 +97,16 @@ function VideoModal({ src, poster, onClose }: { src: string; poster: string; onC
 /* ════════════════════════════════════════════════════════
    OWNER SECTION
 ════════════════════════════════════════════════════════ */
-export default function OwnerSection({ lang = "en" }: OwnerSectionProps) {
-  const content = lang === "ar" ? ownerAr : ownerEn;
+export default function OwnerSection() {
+  const { t, lang } = useTranslation();
+
+  const preTitle = String(t('owner.sectionHeader.preTitle'));
+  const title = String(t('owner.sectionHeader.title'));
+  const mainTitle = String(t('owner.mainTitle'));
+  const paragraphs = t('owner.paragraphs') || [];
+  const stats = t('owner.stats') || [];
+  const quote = String(t('owner.quote'));
+  const quoteAuthor = String(t('owner.quoteAuthor'));
 
   const [videoOpen, setVideoOpen] = useState(false);
   const [headerRef, headerVisible] = useInView(0.1);
@@ -128,11 +130,11 @@ export default function OwnerSection({ lang = "en" }: OwnerSectionProps) {
           }}
         >
           <p className="text-red-500 text-sm font-black uppercase mb-4">
-            {content.owner.sectionHeader.preTitle}
+            {preTitle}
           </p>
 
-          <h2 className="text-5xl md:text-6xl font-black text-white">
-            {content.owner.sectionHeader.title}
+          <h2 className="text-5xl md:text-6xl font-black text-white whitespace-pre-line">
+            {title}
           </h2>
         </div>
 
@@ -159,11 +161,11 @@ export default function OwnerSection({ lang = "en" }: OwnerSectionProps) {
 
           {/* Text */}
           <div ref={textRef}>
-            <h3 className="text-3xl font-bold text-white mb-6">
-              {content.owner.mainTitle}
+            <h3 className="text-3xl font-bold text-white mb-6 whitespace-pre-line">
+              {mainTitle}
             </h3>
 
-            {content.owner.paragraphs.map((p: string, i: number) => (
+            {Array.isArray(paragraphs) && paragraphs.map((p, i) => (
               <p key={i} className="text-white/70 mb-4">
                 {p}
               </p>
@@ -173,7 +175,7 @@ export default function OwnerSection({ lang = "en" }: OwnerSectionProps) {
 
         {/* Stats */}
         <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {content.owner.stats.map((st: any, i: number) => (
+          {Array.isArray(stats) && stats.map((st, i) => (
             <div key={i} className="text-center text-white">
               <h4 className="text-3xl text-red-500">
                 <Counter
@@ -189,10 +191,10 @@ export default function OwnerSection({ lang = "en" }: OwnerSectionProps) {
         {/* Quote */}
         <div ref={quoteRef} className="mt-20 text-center">
           <blockquote className="text-2xl text-white italic">
-            {content.owner.quote}
+            {quote}
           </blockquote>
           <p className="text-gray-400 mt-4">
-            {content.owner.quoteAuthor}
+            {quoteAuthor}
           </p>
         </div>
       </div>

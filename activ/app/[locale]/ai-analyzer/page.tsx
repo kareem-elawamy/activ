@@ -92,7 +92,8 @@ export default function AIAnalyzer() {
     formData.append("file", file);
 
     try {
-      const res = await fetch("/api/analyze", {
+      const apiUrl = typeof window === 'undefined' ? (process.env.INTERNAL_API_URL || 'http://app:3000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000');
+      const res = await fetch(`${apiUrl}/api/analyze`, {
         method: "POST",
         body: formData,
       });
@@ -133,16 +134,43 @@ export default function AIAnalyzer() {
           <p className="text-white/50">تحليل ذكي للاعبين</p>
         </div>
 
-        {/* Upload */}
-        <div className="bg-black/70 border border-red-900/40 p-8 rounded-3xl mb-6 text-center">
-          <input type="file" accept=".docx" onChange={handleFile} />
+        {/* Steps */}
+        <div className="grid md:grid-cols-2 gap-8 mb-10">
+          
+          {/* Step 1: Download */}
+          <div className="bg-black/70 border border-blue-900/40 p-8 rounded-3xl text-center hover:border-blue-500/50 transition">
+            <div className="text-4xl mb-4">📥</div>
+            <h3 className="text-xl font-bold text-white mb-2">الخطوة الأولى</h3>
+            <p className="text-white/60 text-sm mb-6">قم بتحميل نموذج التقييم لتعبئته ببيانات اللاعب.</p>
+            <a 
+              href="/assets/player-data-template.docx" 
+              download 
+              className="inline-block px-8 py-3 bg-blue-600 rounded-xl font-bold text-white hover:bg-blue-500 transition shadow-[0_0_15px_rgba(37,99,235,0.4)]"
+            >
+              تحميل النموذج (Word)
+            </a>
+          </div>
 
-          <button
-            onClick={analyze}
-            className="block mx-auto mt-6 px-8 py-3 bg-red-600 rounded-xl font-bold hover:bg-red-500 transition"
-          >
-            بدء التحليل
-          </button>
+          {/* Step 2: Upload */}
+          <div className="bg-black/70 border border-red-900/40 p-8 rounded-3xl text-center hover:border-red-500/50 transition">
+            <div className="text-4xl mb-4">📤</div>
+            <h3 className="text-xl font-bold text-white mb-2">الخطوة الثانية</h3>
+            <p className="text-white/60 text-sm mb-6">ارفع النموذج بعد تعبئته ليقوم الذكاء الاصطناعي بتحليله.</p>
+            
+            <label className="block max-w-xs mx-auto mb-4 border-2 border-dashed border-red-900/50 rounded-xl p-4 cursor-pointer hover:border-red-500 transition">
+              <span className="block text-red-500">{file ? file.name : "اختر الملف من جهازك"}</span>
+              <input type="file" accept=".docx" onChange={handleFile} className="hidden" />
+            </label>
+
+            <button
+              onClick={analyze}
+              disabled={!file || loading}
+              className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-500 rounded-xl font-bold text-white hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(220,38,38,0.4)]"
+            >
+              {loading ? "جاري التحليل..." : "بدء التحليل 🔥"}
+            </button>
+          </div>
+
         </div>
 
         {/* Loading */}

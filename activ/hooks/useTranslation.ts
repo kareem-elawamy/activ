@@ -1,11 +1,14 @@
-import { useState } from "react";
+'use client';
+
+import { usePathname } from "next/navigation";
 import ar from "@/messages/ar.json";
 import en from "@/messages/en.json";
 
-const translations = { ar, en };
+const translations: Record<string, any> = { ar, en };
 
 export function useTranslation() {
-  const [lang, setLang] = useState<"ar" | "en">("ar");
+  const pathname = usePathname();
+  const lang = pathname?.startsWith("/ar") ? "ar" : "en";
 
   const t = (path: string) => {
     const keys = path.split(".");
@@ -18,5 +21,5 @@ export function useTranslation() {
     return value || path;
   };
 
-  return { t, lang, setLang };
+  return { t, lang, setLang: () => {} };
 }

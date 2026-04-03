@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const analysisSchema = new mongoose.Schema({
     fileName: String,
@@ -16,4 +16,4 @@ const analysisSchema = new mongoose.Schema({
 });
 
 const Analysis = mongoose.model('Analysis', analysisSchema);
-export default Analysis;
+module.exports = Analysis;

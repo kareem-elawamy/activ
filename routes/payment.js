@@ -5,15 +5,16 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 // Create payment
 router.post("/", authMiddleware, async (req, res) => {
-  const { amount, method, receiptUrl } = req.body;
+  const { amount, method, receiptUrl, bookingId } = req.body;
 
   try {
     const payment = new Payment({
       user: req.user.id,
+      booking: bookingId,
       amount,
       method,
       receiptUrl,
-      status: method === "visa" ? "completed" : "pending", // مثال
+      status: "pending", // Fixed: Always pending until admin verifies.
     });
 
     await payment.save();
@@ -27,7 +28,7 @@ router.post("/", authMiddleware, async (req, res) => {
 // Get my payments
 router.get("/my", authMiddleware, async (req, res) => {
   try {
-    const payments = await Payment.find({ user: req.user.id });
+    const payments = await Payment.find({ user: req.user.id }).populate("booking");
     res.json(payments);
   } catch (err) {
     console.error(err);

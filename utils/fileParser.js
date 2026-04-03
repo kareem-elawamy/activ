@@ -1,6 +1,6 @@
-import mammoth from 'mammoth';
+const mammoth = require('mammoth');
 
-export const extractTextFromWord = async (buffer) => {
+exports.extractTextFromWord = async (buffer) => {
   try {
     const result = await mammoth.extractRawText({ buffer }, { preserveEmptyParagraphs: false });
     const cleanText = result.value.trim();

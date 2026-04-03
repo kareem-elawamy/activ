@@ -3,13 +3,25 @@ import Image from 'next/image';
 import React, { useState, useEffect, useRef } from 'react';
 import { IoMdHappy } from "react-icons/io";
 import { MdFamilyRestroom, MdStarRate } from "react-icons/md";
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Testimonials = () => {
+  const { t, lang } = useTranslation();
+
+  const sectionLabel = String(t('testimonials.title'));
+  const sectionSubtitle = String(t('testimonials.subtitle'));
+  const sectionDesc = String(t('testimonials.description'));
+  const happyVisitors = String(t('testimonials.happyVisitors'));
+  const happyFamilies = String(t('testimonials.happyFamilies'));
+  const averageRating = String(t('testimonials.averageRating'));
+
   const [stats] = useState([
     { icon: <IoMdHappy className="w-20 h-20 text-red-600" />, value: '98%', target: 98, suffix: '%', color: 'bg-red-600' },
     { icon: <MdFamilyRestroom className="w-20 h-20 text-red-600" />, value: '500+', target: 500, suffix: '+', color: 'bg-red-600' },
     { icon: <MdStarRate className="w-20 h-20 text-red-600" />, value: '4.9/5', target: 4.9, suffix: '/5', color: 'bg-red-600' },
   ]);
+
+  const statLabels = [happyVisitors, happyFamilies, averageRating];
 
   const [animated, setAnimated] = useState(false);
   const statsRef = useRef(null);
@@ -56,18 +68,24 @@ const Testimonials = () => {
   };
 
   return (
-    <section className="py-20 bg-black mt-20" id="testimonials">
+    <section className="py-20 bg-black mt-20" id="testimonials" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="inline-block px-6 py-2 bg-red-600/20 border-2 border-red-600 rounded-full text-red-600 font-bold text-sm mb-4 animate-fadeIn">
-            Testimonials
+            {sectionLabel}
           </span>
           <h2 className="text-5xl md:text-6xl font-black text-white mb-4 animate-slideUp">
-            What Our <span className="text-red-600">Clients Say</span>
+            {sectionSubtitle.split(' ').map((word, i) => {
+              // Make last two words red for visual style
+              const words = sectionSubtitle.split(' ');
+              return i >= words.length - 2 
+                ? <span key={i} className="text-red-600">{word} </span>
+                : <span key={i}>{word} </span>;
+            })}
           </h2>
           <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slideUp animation-delay-200">
-            Real experiences from parents and children who joined our family
+            {sectionDesc}
           </p>
         </div>
 
@@ -95,9 +113,7 @@ const Testimonials = () => {
                   <span id={`counter-${index}`}>0</span>{stat.suffix}
                 </div>
                 <div className="text-lg font-semibold text-gray-300">
-                  {index === 0 && 'Happy Visitors'}
-                  {index === 1 && 'Happy Families'}
-                  {index === 2 && 'Average Rating'}
+                  {statLabels[index]}
                 </div>
                 <div className="mt-3 h-2 bg-white/20 rounded-full overflow-hidden">
                   <div 
