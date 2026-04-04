@@ -1,5 +1,5 @@
-import arMessages from './messages/ar.json';
-import enMessages from './messages/en.json';
+import arMessages from '../messages/ar.json';
+import enMessages from '../messages/en.json';
 
 type Locale = 'ar' | 'en';
 

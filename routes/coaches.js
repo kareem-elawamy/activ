@@ -29,10 +29,10 @@ router.get("/:id", async (req, res) => {
 // POST create coach (Admin only)
 router.post("/", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
-    const { name, specialty, specialization, title, bio, image, experience, students, rating, certifications } = req.body;
+    const { name, specialty, title, bio, image, experience, students, rating, certifications } = req.body;
     if (!name) return res.status(400).json({ message: "Coach name is required" });
 
-    const coach = new Coach({ name, specialty, specialization, title, bio, image, experience, students, rating, certifications });
+    const coach = new Coach({ name, specialty, title, bio, image, experience, students, rating, certifications });
     await coach.save();
     res.status(201).json(coach);
   } catch (err) {

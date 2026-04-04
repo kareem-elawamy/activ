@@ -5,11 +5,11 @@ import { Toaster } from 'react-hot-toast';
 import { redirect } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import ClientWrapper from '@/components/ClientWrapper';
-import { Inter } from 'next/font/google';
+import { Cairo } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import '../globals.css';
-const inter = Inter({ subsets: ['latin'] });
+const cairo = Cairo({ subsets: ['latin', 'arabic'], weight: ['300', '400', '600', '700', '800', '900'] });
 
 interface LocaleLayoutProps {
   children: ReactNode;
@@ -28,7 +28,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <html lang={locale} dir={dir}>
-      <body className={`${inter.className} antialiased bg-black text-white`}>
+      <body className={`${cairo.className} antialiased bg-black text-white`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ClientWrapper>
             <Toaster position="top-center" reverseOrder={false} />

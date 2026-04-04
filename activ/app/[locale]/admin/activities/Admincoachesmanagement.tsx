@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import api from "@/utils/api";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { User, Plus, Edit2, Trash2, Camera, Save, Loader2 } from 'lucide-react';
 
 type Coach = {
   _id: string;
@@ -12,6 +13,11 @@ type Coach = {
   specialty: string;
   bio: string;
   image?: string;
+  title?: string;
+  experience?: string;
+  students?: string;
+  rating?: string;
+  certifications?: string;
 };
 
 type Props = {
@@ -23,6 +29,11 @@ const EMPTY_FORM = {
   specialty: "",
   bio: "",
   image: "",
+  title: "",
+  experience: "0",
+  students: "0",
+  rating: "5.0",
+  certifications: "0"
 };
 
 export default function AdminCoachesManagement({ lang = "en" }: Props) {
@@ -73,6 +84,11 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
       specialty: coach.specialty || "",
       bio: coach.bio || "",
       image: coach.image || "",
+      title: coach.title || "",
+      experience: coach.experience || "0",
+      students: coach.students || "0",
+      rating: coach.rating || "5.0",
+      certifications: coach.certifications || "0",
     });
     setImageFile(null);
     setImagePreview(coach.image || null);
@@ -124,11 +140,16 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
       }
     }
 
-    const payload = { 
-      name: formData.name, 
-      specialty: formData.specialty, 
-      bio: formData.bio, 
-      image: imageUrl 
+    const payload = {
+      name: formData.name,
+      specialty: formData.specialty,
+      bio: formData.bio,
+      image: imageUrl,
+      title: formData.title,
+      experience: formData.experience,
+      students: formData.students,
+      rating: formData.rating,
+      certifications: formData.certifications
     };
 
     try {
@@ -174,14 +195,16 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
           onClick={openAddModal}
           className="px-5 py-2.5 bg-gradient-to-r from-red-700 to-red-500 rounded-xl font-bold text-sm hover:opacity-90 transition shadow-lg"
         >
-          ➕ {t('addCoach')}
+          <div className="flex items-center gap-2">
+            <Plus className="w-4 h-4" /> {t('addCoach')}
+          </div>
         </button>
       </div>
 
       {/* Coaches Grid */}
       {coaches.length === 0 ? (
         <div className="text-center py-20">
-          <div className="text-5xl mb-4">👨‍🏫</div>
+          <div className="flex justify-center mb-4"><User className="w-12 h-12 text-white/20" /></div>
           <h3 className="text-xl font-bold text-white">{t('noCoaches')}</h3>
           <p className="text-white/40 mt-2">{t('noCoachesDesc')}</p>
         </div>
@@ -194,7 +217,7 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
                 {coach.image ? (
                   <Image src={coach.image} alt={coach.name} fill className="object-cover" />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-6xl opacity-30">👨‍🏫</div>
+                  <div className="flex items-center justify-center h-full opacity-30"><User className="w-16 h-16 text-white" /></div>
                 )}
               </div>
 
@@ -206,11 +229,11 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
 
                 {/* Actions */}
                 <div className="flex gap-2 mt-4">
-                  <button onClick={() => handleEdit(coach)} className="flex-1 py-2 bg-yellow-700/40 hover:bg-yellow-700 rounded-lg text-xs font-bold transition">
-                    ✏️ {t('edit')}
+                  <button onClick={() => handleEdit(coach)} className="flex-1 py-2 bg-yellow-700/40 hover:bg-yellow-700 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                    <Edit2 className="w-3.5 h-3.5" /> {t('edit')}
                   </button>
-                  <button onClick={() => handleDelete(coach._id)} className="flex-1 py-2 bg-red-700/40 hover:bg-red-700 rounded-lg text-xs font-bold transition">
-                    🗑️ {t('delete')}
+                  <button onClick={() => handleDelete(coach._id)} className="flex-1 py-2 bg-red-700/40 hover:bg-red-700 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1">
+                    <Trash2 className="w-3.5 h-3.5" /> {t('delete')}
                   </button>
                 </div>
               </div>
@@ -243,12 +266,54 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
               {/* Specialty */}
               <div>
                 <label className="text-white/40 text-xs font-semibold block mb-1">{t('specialty')}</label>
+                <div className="relative">
+                  <select
+                    value={formData.specialty}
+                    onChange={e => updateField('specialty', e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:bg-white/[0.08] hover:border-red-500/50 outline-none transition cursor-pointer appearance-none"
+                  >
+                    <option value="" className="bg-[#0f0f0f] text-white/50">اختر التخصص الحركي أو الرياضي</option>
+                    <option value="تأهيل حركى" className="bg-[#0f0f0f] text-white">تأهيل حركى</option>
+                    <option value="كمال اجسام" className="bg-[#0f0f0f] text-white">كمال اجسام</option>
+                    <option value="جمباز" className="bg-[#0f0f0f] text-white">جمباز</option>
+                    <option value="تايكوندو" className="bg-[#0f0f0f] text-white">تايكوندو</option>
+                    <option value="سباحة" className="bg-[#0f0f0f] text-white">سباحة</option>
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 left-auto flex items-center pr-4" dir={lang === 'ar' ? 'ltr' : 'rtl'}>
+                    <svg className="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="text-white/40 text-xs font-semibold block mb-1">اللقب / المسمى</label>
                 <input
                   type="text"
-                  value={formData.specialty}
-                  onChange={e => updateField('specialty', e.target.value)}
+                  value={formData.title}
+                  onChange={e => updateField('title', e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition"
                 />
+              </div>
+
+              {/* Stats & Experience */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-white/40 text-[10px] font-bold uppercase tracking-widest block mb-1.5">سنوات الخبرة</label>
+                  <input type="text" value={formData.experience} onChange={e => updateField('experience', e.target.value)} className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition" />
+                </div>
+                <div>
+                  <label className="text-white/40 text-[10px] font-bold uppercase tracking-widest block mb-1.5">عدد المتدربين</label>
+                  <input type="text" value={formData.students} onChange={e => updateField('students', e.target.value)} className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition" />
+                </div>
+                <div>
+                  <label className="text-white/40 text-[10px] font-bold uppercase tracking-widest block mb-1.5">التقييم (مثال: 5.0)</label>
+                  <input type="text" value={formData.rating} onChange={e => updateField('rating', e.target.value)} className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition" />
+                </div>
+                <div>
+                  <label className="text-white/40 text-[10px] font-bold uppercase tracking-widest block mb-1.5">الشهادات المعتمدة</label>
+                  <input type="text" value={formData.certifications} onChange={e => updateField('certifications', e.target.value)} className="w-full px-3 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-white text-sm focus:border-red-500 focus:outline-none transition" />
+                </div>
               </div>
 
               {/* Bio */}
@@ -265,20 +330,20 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
               {/* Image Upload with Preview */}
               <div>
                 <label className="text-white/40 text-xs font-semibold block mb-2">{t('image')}</label>
-                
+
                 {/* Preview */}
                 {imagePreview && (
                   <div className="relative w-full h-40 rounded-xl overflow-hidden border border-white/10 mb-3">
                     <Image src={imagePreview} alt="preview" fill className="object-cover" />
-                    <button 
-                      onClick={() => { setImageFile(null); setImagePreview(null); setFormData((p: any) => ({...p, image: ''})); }}
+                    <button
+                      onClick={() => { setImageFile(null); setImagePreview(null); setFormData((p: any) => ({ ...p, image: '' })); }}
                       className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/70 text-white/80 flex items-center justify-center text-xs hover:bg-red-600 transition"
                     >✕</button>
                   </div>
                 )}
 
                 <label className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white/[0.04] border-2 border-dashed border-white/15 text-white/50 text-sm cursor-pointer hover:border-red-500/50 hover:text-white/70 transition">
-                  <span>📷</span>
+                  <Camera className="w-4 h-4" />
                   <span>{imageFile ? imageFile.name : (imagePreview ? t('image') : t('image'))}</span>
                   <input
                     type="file"
@@ -297,9 +362,9 @@ export default function AdminCoachesManagement({ lang = "en" }: Props) {
               <button
                 onClick={handleSave}
                 disabled={saving || !formData.name.trim()}
-                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-500 font-bold text-sm hover:opacity-90 transition disabled:opacity-40"
+                className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-500 font-bold text-sm hover:opacity-90 transition disabled:opacity-40 flex items-center justify-center gap-2"
               >
-                {saving ? '⟳' : '💾'} {t('save')}
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} {t('save')}
               </button>
             </div>
           </div>

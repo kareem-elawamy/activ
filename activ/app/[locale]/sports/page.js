@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useTranslation } from '@/hooks/useTranslation';
+import { Trophy, Activity, Dumbbell, Target, Zap, Waves, User, Calendar, Clock, Users, Banknote, MapPin, Search } from 'lucide-react';
 import axios from 'axios';
 import EmptyState from '@/components/EmptyState';
 import ActivityCardSkeleton from '@/components/ActivityCardSkeleton';
@@ -18,10 +19,12 @@ export default function SportsPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories = [
-    { id: 'all', name: String(t('sportsFilters.all')) || 'All Sports', icon: '🏅' },
-    { id: 'kung-fu', name: String(t('sportsFilters.kung-fu')) || 'Kung Fu', icon: '🥋' },
-    { id: 'swimming', name: String(t('sportsFilters.swimming')) || 'Swimming', icon: '🏊' },
-    { id: 'gymnastics', name: String(t('sportsFilters.gymnastics')) || 'Gymnastics', icon: '🤸' },
+    { id: 'all', name: String(t('sportsFilters.all')) || 'All Sports', icon: <Trophy className="w-4 h-4" /> },
+    { id: 'rehab', name: String(t('sportsFilters.rehab')) || 'Rehab', icon: <Activity className="w-4 h-4" /> },
+    { id: 'bodybuilding', name: String(t('sportsFilters.bodybuilding')) || 'Bodybuilding', icon: <Dumbbell className="w-4 h-4" /> },
+    { id: 'gymnastics', name: String(t('sportsFilters.gymnastics')) || 'Gymnastics', icon: <Target className="w-4 h-4" /> },
+    { id: 'taekwondo', name: String(t('sportsFilters.taekwondo')) || 'Taekwondo', icon: <Zap className="w-4 h-4" /> },
+    { id: 'swimming', name: String(t('sportsFilters.swimming')) || 'Swimming', icon: <Waves className="w-4 h-4" /> },
   ];
 
   // Fetch fresh workout data on every mount — no caching
@@ -87,7 +90,7 @@ export default function SportsPage() {
                   : 'bg-black text-white border-2 border-red-500 hover:border-red-400 hover:shadow-lg hover:scale-105'
               }`}
             >
-              <span className="text-2xl">{cat.icon}</span>
+              <span className="shrink-0">{cat.icon}</span>
               <span>{cat.name}</span>
             </motion.button>
           ))}
@@ -100,7 +103,7 @@ export default function SportsPage() {
           </div>
         ) : filteredWorkouts.length === 0 ? (
           <EmptyState 
-            icon="🏅" 
+            icon={<Trophy size={48} className="text-red-500/20" />} 
             title={lang === 'ar' ? 'لا توجد رياضات تطابق بحثك' : 'No sports match your search'} 
             message={lang === 'ar' ? 'حاول تغيير كلمات البحث أو الفلاتر لرؤية المزيد من الأنشطة.' : 'Try changing your search terms or filters to see more activities.'}
             actionLabel={lang === 'ar' ? 'مسح الفلاتر' : 'Clear Filters'}
@@ -130,14 +133,35 @@ export default function SportsPage() {
                   <h3 className="text-2xl font-display font-black text-white mb-2">{w.name}</h3>
                   <p className="text-red-400/80 mb-2 line-clamp-2">{w.description}</p>
 
-                  <div className="space-y-2 mb-4 text-white/80">
-                    <div className="flex items-center gap-3"><span>👤</span><span className="font-semibold">Coach: {w.coach}</span></div>
-                    <div className="flex items-center gap-3"><span>📅</span><span className="font-semibold">Date: {w.date || '-'}</span></div>
-                    <div className="flex items-center gap-3"><span>⏰</span><span className="font-semibold">Time: {w.time || '-'}</span></div>
-                    <div className="flex items-center gap-3"><span>👥</span><span className="font-semibold">Age: {w.ageRange || 'All'}</span></div>
-                    <div className="flex items-center gap-3 text-red-500"><span>💰</span><span className="font-bold text-lg">{w.price || '-'} EGP/month</span></div>
-                    <div className="flex items-center gap-3"><span>📍</span><span className="font-semibold">Location: {w.location || '-'}</span></div>
-                    <div className="flex items-center gap-3"><span>🎯</span><span className="font-semibold">Category: {w.category}</span></div>
+                  <div className="space-y-3 mb-6 text-white/70">
+                    <div className="flex items-center gap-3">
+                      <User size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Coach: {w.coach}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Calendar size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Date: {w.date || '-'}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Clock size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Time: {w.time || '-'}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Users size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Age: {w.ageRange || 'All'}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-red-500">
+                      <Banknote size={18} className="font-bold" />
+                      <span className="font-bold text-lg">{w.price || '-'} EGP/month</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <MapPin size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Location: {w.location || '-'}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Target size={16} className="text-red-500" />
+                      <span className="text-sm font-semibold">Category: {w.category}</span>
+                    </div>
                   </div>
 
                   {/* زرار الحجز */}

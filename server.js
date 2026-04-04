@@ -18,6 +18,8 @@ const paymentRouter = require("./routes/payment.js");
 const usersRouter = require("./routes/users.js");
 const workoutRouter = require("./routes/workout.js");
 const coachesRouter = require("./routes/coaches.js");
+const heroesRouter = require("./routes/heroes.js");
+const complaintsRouter = require("./routes/complaints.js");
 
 // 4️⃣ Initialize app
 const app = express();
@@ -58,6 +60,8 @@ app.use("/api/payment", paymentRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/workout", workoutRouter);
 app.use("/api/coaches", coachesRouter);
+app.use("/api/heroes", heroesRouter);
+app.use("/api/complaints", complaintsRouter);
 
 // Analyze uploaded Word file
 app.post("/api/analyze", upload.single("file"), analysisController.analyzeFile);

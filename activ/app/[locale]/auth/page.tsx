@@ -8,13 +8,56 @@ import { useTranslations, useLocale } from "next-intl";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
+// ─── Password rules (must match backend regex exactly) ───────────────────────
+const rules = (locale: string) => [
+  {
+    id: 'length',
+    test: (p: string) => p.length >= 8,
+    ar: '8 أحرف على الأقل',
+    en: 'At least 8 characters',
+  },
+  {
+    id: 'upper',
+    test: (p: string) => /[A-Z]/.test(p),
+    ar: 'حرف كبير (A-Z)',
+    en: 'One uppercase letter (A-Z)',
+  },
+  {
+    id: 'lower',
+    test: (p: string) => /[a-z]/.test(p),
+    ar: 'حرف صغير (a-z)',
+    en: 'One lowercase letter (a-z)',
+  },
+  {
+    id: 'number',
+    test: (p: string) => /\d/.test(p),
+    ar: 'رقم (0-9)',
+    en: 'One number (0-9)',
+  },
+  {
+    id: 'special',
+    test: (p: string) => /[@$!%*?&]/.test(p),
+    ar: 'رمز خاص مثل @$!%*?&',
+    en: 'One special char like @$!%*?&',
+  },
+];
+
 export default function Auth() {
   const router = useRouter();
   const locale = useLocale();
   const t = useTranslations('auth');
   const [activeTab, setActiveTab] = useState("login");
+  const [password, setPassword] = useState("");
+  const [pwFocused, setPwFocused] = useState(false);
 
-  const switchTab = (tab: string) => setActiveTab(tab);
+  const passwordRules = rules(locale);
+  const allValid = passwordRules.every(r => r.test(password));
+
+  const switchTab = (tab: string) => {
+    setActiveTab(tab);
+    setPassword("");
+    setPwFocused(false);
+  };
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -161,13 +204,46 @@ export default function Auth() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600"
               required
             />
-            <input
-              type="password"
-              name="password"
-              placeholder={t('passwordPlaceholder')}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600"
-              required
-            />
+
+            {/* ── Password + live checker ───────────────────────── */}
+            <div>
+              <input
+                type="password"
+                name="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                onFocus={() => setPwFocused(true)}
+                placeholder={t('passwordPlaceholder')}
+                className={`w-full px-4 py-3 border rounded-lg text-black focus:outline-none focus:ring-1 transition-colors ${
+                  pwFocused && password.length > 0
+                    ? allValid
+                      ? 'border-green-500 focus:border-green-500 focus:ring-green-500'
+                      : 'border-orange-400 focus:border-orange-400 focus:ring-orange-400'
+                    : 'border-gray-300 focus:border-red-600 focus:ring-red-600'
+                }`}
+                required
+              />
+
+              {/* Live rules — show only after user starts typing */}
+              {pwFocused && password.length > 0 && (
+                <div className="mt-2 p-3 bg-gray-50 border border-gray-200 rounded-lg space-y-1.5">
+                  {passwordRules.map(rule => {
+                    const passed = rule.test(password);
+                    return (
+                      <div key={rule.id} className="flex items-center gap-2 text-xs">
+                        <span className={`flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-white font-bold text-[10px] transition-colors ${passed ? 'bg-green-500' : 'bg-red-400'}`}>
+                          {passed ? '✓' : '✕'}
+                        </span>
+                        <span className={`transition-colors ${passed ? 'text-green-700' : 'text-red-500'}`}>
+                          {locale === 'ar' ? rule.ar : rule.en}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
             <input
               type="password"
               name="confirm"
@@ -177,12 +253,14 @@ export default function Auth() {
             />
             <button
               type="submit"
-              className="w-full py-3 mt-4 bg-gradient-to-r from-red-700 to-red-600 text-white font-black rounded-lg hover:shadow-lg hover:shadow-red-600/30 hover:-translate-y-1 transition-all duration-300"
+              disabled={!allValid}
+              className="w-full py-3 mt-2 bg-gradient-to-r from-red-700 to-red-600 text-white font-black rounded-lg hover:shadow-lg hover:shadow-red-600/30 hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               {t('createAccountButton')}
             </button>
           </form>
         )}
+
       </div>
 
       {/* Right Side Video */}
