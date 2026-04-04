@@ -40,7 +40,7 @@ export default function Dashboard() {
   if (loading) return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center">
       <div className="text-center">
-        <div className="text-4xl mb-3 animate-bounce">⏳</div>
+        <div className="mb-3 flex justify-center text-yellow-500 animate-bounce"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-10 h-10"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <p className="text-white/60">{t('loading')}</p>
       </div>
     </div>
@@ -89,11 +89,11 @@ export default function Dashboard() {
                         </div>
                         <div className="flex flex-col items-end gap-2 text-sm text-right">
                            {(payment.status === 'pending' && payment.booking?.status !== 'approved' && payment.booking?.status !== 'rejected') ? (
-                               <span className="bg-yellow-900/30 border border-yellow-700/40 text-yellow-500 px-3 py-1 rounded-full font-bold">⏳ {t('pending')}</span>
+                               <span className="bg-yellow-900/30 border border-yellow-700/40 text-yellow-500 px-3 py-1 rounded-full font-bold flex items-center gap-1.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>{t('pending')}</span>
                            ) : (payment.status === 'completed' || payment.booking?.status === 'approved') ? (
-                               <span className="bg-green-900/30 border border-green-700/40 text-green-400 px-3 py-1 rounded-full font-bold">✅ {t('completed')}</span>
+                               <span className="bg-green-900/30 border border-green-700/40 text-green-400 px-3 py-1 rounded-full font-bold flex items-center gap-1.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>{t('completed')}</span>
                            ) : (
-                               <span className="bg-red-900/30 border border-red-700/40 text-red-500 px-3 py-1 rounded-full font-bold">❌ {t('rejected')}</span>
+                               <span className="bg-red-900/30 border border-red-700/40 text-red-500 px-3 py-1 rounded-full font-bold flex items-center gap-1.5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>{t('rejected')}</span>
                            )}
                            {payment.receiptUrl && <a href={payment.receiptUrl} target="_blank" className="bg-white/5 border border-white/10 px-3 py-1 rounded-full text-blue-400 hover:text-blue-300 hover:bg-white/10 transition mt-2 truncate max-w-[150px] inline-block">{t('viewReceipt')}</a>}
                         </div>

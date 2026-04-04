@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
+import { Users, Waves, Activity, Dumbbell, UserSquare2, Medal, User, Star, Search, X } from 'lucide-react';
 import api from '@/utils/api';
 
 export default function CoachesPage() {
@@ -15,10 +16,12 @@ export default function CoachesPage() {
   const [filterSport, setFilterSport] = useState('all');
 
   const sports = [
-    { id: 'all', label: t('allCoaches'), icon: '👥' },
-    { id: 'swimming', label: t('swimming'), icon: '🏊' },
-    { id: 'gymnastics', label: t('gymnastics'), icon: '🤸' },
-    { id: 'martial-arts', label: t('martialArts'), icon: '🥋' },
+    { id: 'all', label: t('allCoaches'), icon: <Users className="w-6 h-6" /> },
+    { id: 'سباحة', label: 'سباحة', icon: <Waves className="w-6 h-6" /> },
+    { id: 'تأهيل حركى', label: 'تأهيل حركى', icon: <Activity className="w-6 h-6" /> },
+    { id: 'كمال اجسام', label: 'كمال أجسام', icon: <Dumbbell className="w-6 h-6" /> },
+    { id: 'جمباز', label: 'جمباز', icon: <UserSquare2 className="w-6 h-6" /> },
+    { id: 'تايكوندو', label: 'تايكوندو', icon: <Medal className="w-6 h-6" /> },
   ];
 
   useEffect(() => {
@@ -37,14 +40,14 @@ export default function CoachesPage() {
 
   const filteredCoaches = coaches.filter((coach) => {
     if (filterSport === 'all') return true;
-    return coach.specialization === filterSport;
+    return coach.specialty === filterSport;
   });
 
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce text-red-500">👨‍🏫</div>
+          <div className="mb-4 flex justify-center animate-bounce"><User className="w-16 h-16 text-red-500" /></div>
           <p className="text-xl font-bold text-white">{t('loading')}</p>
         </div>
       </div>
@@ -85,13 +88,12 @@ export default function CoachesPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 * index }}
               onClick={() => setFilterSport(sport.id)}
-              className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-2 ${
-                filterSport === sport.id
+              className={`px-6 py-3 rounded-2xl font-bold transition-all flex items-center gap-2 ${filterSport === sport.id
                   ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white shadow-xl scale-105'
                   : 'bg-red-900 text-gray-300 hover:shadow-lg hover:scale-105'
-              }`}
+                }`}
             >
-              <span className="text-2xl">{sport.icon}</span>
+              <span className="flex items-center justify-center">{sport.icon}</span>
               <span>{sport.label}</span>
             </motion.button>
           ))}
@@ -119,8 +121,8 @@ export default function CoachesPage() {
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-9xl">
-                      👨‍🏫
+                    <div className="w-full h-full flex items-center justify-center bg-red-950">
+                      <User className="w-32 h-32 text-red-900/40" />
                     </div>
                   )}
 
@@ -136,9 +138,10 @@ export default function CoachesPage() {
                   </div>
 
                   {/* Badge */}
-                  {coach.specialization && (
-                    <div className="absolute top-4 right-4 px-4 py-2 bg-red-500 rounded-full text-white font-bold text-sm shadow-lg">
-                      {sports.find(s => s.id === coach.specialization)?.icon || '🏃'} {sports.find(s => s.id === coach.specialization)?.label || coach.specialization}
+                  {coach.specialty && (
+                    <div className="absolute top-4 right-4 px-4 py-2 bg-red-500 rounded-full text-white font-bold text-sm shadow-lg flex items-center gap-1.5">
+                      <span className="w-4 h-4">{sports.find(s => s.id === coach.specialty)?.icon || <Activity className="w-4 h-4" />}</span>
+                      <span>{sports.find(s => s.id === coach.specialty)?.label || coach.specialty}</span>
                     </div>
                   )}
                 </div>
@@ -181,9 +184,9 @@ export default function CoachesPage() {
             animate={{ opacity: 1 }}
             className="text-center py-20 text-gray-400"
           >
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-2xl font-bold mb-2">{t('noCoaches')}</h3>
-            <p>{t('noCoachesHint')}</p>
+            <div className="flex justify-center mb-4"><Search className="w-16 h-16 text-white/20" /></div>
+            <h3 className="text-2xl font-bold mb-2 text-white">{t('noCoaches')}</h3>
+            <p className="text-white/40">{t('noCoachesHint')}</p>
           </motion.div>
         )}
 
@@ -208,7 +211,9 @@ export default function CoachesPage() {
                   {selectedCoach.image ? (
                     <Image src={selectedCoach.image} alt={selectedCoach.name} fill className="object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-5xl bg-red-950">👨‍🏫</div>
+                    <div className="w-full h-full flex items-center justify-center bg-red-950">
+                      <User className="w-16 h-16 text-red-900/50" />
+                    </div>
                   )}
                 </div>
                 <h3 className="text-2xl font-black">{selectedCoach.name}</h3>
@@ -225,13 +230,16 @@ export default function CoachesPage() {
                     <div className="text-xs text-white/40">{t('students')}</div>
                   </div>
                   <div className="bg-red-950/30 rounded-xl p-3">
-                    <div className="text-xl font-black text-red-500">⭐ {selectedCoach.rating || '5.0'}</div>
-                    <div className="text-xs text-white/40">{t('certs')}</div>
+                    <div className="text-xl font-black text-red-500 flex items-center justify-center gap-1">
+                      <Star className="w-5 h-5 fill-red-500" />
+                      {selectedCoach.rating || '5.0'}
+                    </div>
+                    <div className="text-xs text-white/40 mt-1">{t('certs')}</div>
                   </div>
                 </div>
 
-                <button onClick={() => setSelectedCoach(null)} className="mt-6 w-full py-3 bg-white/5 border border-white/10 rounded-xl font-semibold hover:bg-white/10 transition">
-                  ✕
+                <button onClick={() => setSelectedCoach(null)} className="mt-6 w-full py-3 bg-white/5 border border-white/10 rounded-xl font-semibold hover:bg-white/10 transition flex items-center justify-center">
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </motion.div>

@@ -26,6 +26,7 @@ const Navbar = () => {
     { href: "/", key: "nav.home" },
     { href: "/sports", key: "nav.sports" },
     { href: "/coaches", key: "nav.coaches" },
+    { href: "/heroes", key: "nav.heroes" },
     { href: "/ai-analyzer", key: "nav.aiAnalyzer" },
     { href: "/about-us", key: "nav.about" },
     { href: "/contact-us", key: "nav.contact" },
@@ -175,7 +176,9 @@ const AuthSection = ({ userName, userRole, lang, t, onLogout }: { userName: stri
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm bg-white text-black hover:bg-gray-200 transition-colors shadow-lg"
           >
-            <div className="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center text-xs">👤</div>
+            <div className="w-5 h-5 rounded-full bg-black/10 flex items-center justify-center text-xs">
+              <svg fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
             <span className="truncate max-w-[120px]">{userName}</span>
             <span className="text-xs opacity-50">▼</span>
           </button>
@@ -188,14 +191,14 @@ const AuthSection = ({ userName, userRole, lang, t, onLogout }: { userName: stri
                   onClick={() => setDropdownOpen(false)}
                   className="px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"
                 >
-                  <span>🧑‍💻</span> {t("nav.profile")}
+                  <span className="w-4 h-4 flex items-center justify-center"><svg fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> {t("nav.profile")}
                 </Link>
                 <Link 
                   href={"/my-bookings" as any}
                   onClick={() => setDropdownOpen(false)}
                   className="px-4 py-3 text-sm text-white/80 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"
                 >
-                  <span>📋</span> {t("nav.myBookings")}
+                  <span className="w-4 h-4 flex items-center justify-center"><svg fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg></span> {t("nav.myBookings")}
                 </Link>
                 <div className="h-px bg-white/10 my-1 font-bold"></div>
                 <button 
@@ -205,7 +208,7 @@ const AuthSection = ({ userName, userRole, lang, t, onLogout }: { userName: stri
                   }}
                   className="px-4 py-3 text-sm text-red-500 hover:text-red-400 hover:bg-red-950/30 text-left transition-colors flex items-center gap-2 font-bold w-full"
                 >
-                  <span>🚪</span> {t("nav.logout")}
+                  <span className="w-4 h-4 flex items-center justify-center"><svg fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg></span> {t("nav.logout")}
                 </button>
               </div>
             </div>

@@ -10,7 +10,7 @@ interface Star {
 
 interface FooterColumnProps {
   title: string;
-  links: string[];
+  links: { label: string; href: string; external?: boolean }[];
   lang?: "en" | "ar";
 }
 
@@ -30,21 +30,37 @@ export default function UltraFooter() {
   const programsCol = t('footer.columns.programs') || [];
   const socialCol = t('footer.columns.social') || [];
 
+  const pagesLinks = Array.isArray(pagesCol) ? pagesCol.map((label: string, i: number) => {
+    const paths = [
+      `/${lang}`, 
+      `/${lang}/heroes`, 
+      `/${lang}/coaches`, 
+      `/${lang}/sports`, 
+      `/${lang}/ai-analyzer`, 
+      `/${lang}/about-us`, 
+      `/${lang}/contact-us`
+    ];
+    return { label, href: paths[i] || `/${lang}` };
+  }) : [];
+
+  const programsLinks = Array.isArray(programsCol) ? programsCol.map((label: string) => {
+    return { label, href: `/${lang}/sports` || `/${lang}/heroes` };
+  }) : [];
+
+  const socialLinks = Array.isArray(socialCol) ? socialCol.map((label: string, i: number) => {
+    const url = i === 0 ? "https://www.facebook.com/share/1CMa57wnQh/?mibextid=wwXIfr" : "https://wa.me/201207128432";
+    return { label, href: url, external: true };
+  }) : [];
+
   const columnsData = [
-    { title: String(t('footer.columns.pagesTitle')), links: Array.isArray(pagesCol) ? pagesCol : [] },
-    { title: String(t('footer.columns.programsTitle')), links: Array.isArray(programsCol) ? programsCol : [] },
-    { title: String(t('footer.columns.socialTitle')), links: Array.isArray(socialCol) ? socialCol : [] }
+    { title: String(t('footer.columns.pagesTitle')), links: pagesLinks },
+    { title: String(t('footer.columns.programsTitle')), links: programsLinks },
+    { title: String(t('footer.columns.socialTitle')), links: socialLinks }
   ];
 
   return (
     <footer ref={footerRef} dir={lang === "ar" ? "rtl" : "ltr"} className="relative overflow-hidden bg-black text-white pt-24 pb-10">
       {/* Neon Backgrounds و Stars كما قبل */}
-
-      <div className="max-w-7xl mx-auto px-6 mb-24 relative z-10 text-center">
-        <h2 className="text-4xl font-bold animate-bounce text-white drop-shadow-[0_0_20px_red]">
-          {footerHeading}
-        </h2>
-      </div>
 
       <div className="bg-black/95 text-white rounded-t-[50px] z-10 relative shadow-[0_0_50px_rgba(255,0,0,0.6)] border-t border-red-800">
         <div className="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 relative z-10">
@@ -78,14 +94,24 @@ export default function UltraFooter() {
   );
 }
 
-function FooterColumn({ title, links, lang }: FooterColumnProps) {
+interface FooterLinkItem {
+  label: string;
+  href: string;
+  external?: boolean;
+}
+
+function FooterColumn({ title, links, lang }: { title: string, links: FooterLinkItem[], lang?: "en" | "ar" }) {
   return (
     <div>
       <h4 className="font-semibold mb-4 text-red-500 drop-shadow-[0_0_10px_red]">{title}</h4>
       <ul className="space-y-3 text-white/80">
-        {links.map(link => (
-          <li key={link} className="hover:text-pink-500 transition">
-            <Link href={`/${lang}/${link.toLowerCase().replace(/\s+/g, "-")}`}>{link}</Link>
+        {links.map((link, idx) => (
+          <li key={idx} className="hover:text-pink-500 transition">
+            {link.external ? (
+              <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
+            ) : (
+              <Link href={link.href}>{link.label}</Link>
+            )}
           </li>
         ))}
       </ul>

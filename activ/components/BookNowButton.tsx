@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
+import { useRouter, usePathname } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 interface BookButtonProps {
@@ -35,6 +36,8 @@ const WALLET_NUMBERS: Record<string, string> = {
 
 export default function BookButton({ activity }: BookButtonProps) {
   const { lang, t: rawT } = useTranslation();
+  const router   = useRouter();
+  const pathname = usePathname();
   
   const t = {
     bookNow: String(rawT('bookNow.bookNow')),
@@ -121,6 +124,13 @@ export default function BookButton({ activity }: BookButtonProps) {
   }, [activity._id]);
 
   const open = () => {
+    // 🔒 Redirect to auth if not logged in
+    const token = localStorage.getItem('token');
+    if (!token) {
+      const locale = pathname?.startsWith('/ar') ? 'ar' : 'en';
+      router.push(`/${locale}/auth`);
+      return;
+    }
     setStep('info');
     setError('');
     setPayMethod('');
@@ -356,7 +366,15 @@ export default function BookButton({ activity }: BookButtonProps) {
                             : 'bg-white/[0.02] border-white/10 hover:border-white/20'
                         }`}
                       >
-                        <span className="text-2xl">{m === 'receipt' ? '🧾' : m === 'instapay' ? '📲' : '📱'}</span>
+                        <span className="flex items-center justify-center w-8 h-8 text-white/50">
+                          {m === 'receipt' ? (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                          ) : m === 'instapay' ? (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><path d="M20 12V8H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h14"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><circle cx="17" cy="15" r="1" fill="currentColor"/></svg>
+                          )}
+                        </span>
                         <div>
                           <div className={`font-bold text-sm ${payMethod === m ? 'text-red-400' : 'text-white/80'}`}>
                             {(t as any)[m]}
@@ -385,7 +403,7 @@ export default function BookButton({ activity }: BookButtonProps) {
                               : 'bg-white/[0.02] border-white/10 text-white/50 hover:border-white/20'
                           }`}
                         >
-                          {w === 'vodafone' ? '📱 Vodafone' : w === 'orange' ? '🟠 Orange' : w === 'etisalat' ? '💚 Etisalat' : '📲 WE Pay'}
+                          {w === 'vodafone' ? 'Vodafone' : w === 'orange' ? 'Orange' : w === 'etisalat' ? 'Etisalat' : 'WE Pay'}
                         </button>
                       ))}
                     </div>
@@ -421,7 +439,7 @@ export default function BookButton({ activity }: BookButtonProps) {
                     <div className="flex justify-between"><span className="text-white/40">{t.method}</span>
                       <span className="text-red-400 font-bold capitalize">{payMethod}{walletType ? ` (${walletType})` : ''}</span>
                     </div>
-                    <div className="flex justify-between border-t border-white/5 pt-1.5 mt-1"><span className="text-white/40">{t.priceNote}</span><span className="text-yellow-400 font-bold">⏳</span></div>
+                    <div className="flex justify-between border-t border-white/5 pt-1.5 mt-1"><span className="text-white/40">{t.priceNote}</span><span className="text-yellow-400 font-bold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span></div>
                   </div>
 
                   <div>
@@ -437,14 +455,14 @@ export default function BookButton({ activity }: BookButtonProps) {
                       <input ref={fileRef} type="file" accept=".jpg,.jpeg,.png,.webp,.pdf" className="hidden" onChange={e => handleFile(e.target.files?.[0] || null)} />
                       {proofFile ? (
                         <div>
-                          <div className="text-3xl mb-2">✅</div>
+                          <div className="mb-2 flex justify-center text-green-500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-8 h-8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                           <p className="text-green-400 font-bold text-sm">{proofFile.name}</p>
                           <p className="text-white/30 text-xs mt-1">{(proofFile.size / 1024).toFixed(0)} KB</p>
                           <button onClick={e => { e.stopPropagation(); setProofFile(null); }} className="mt-2 text-white/30 hover:text-red-400 text-xs transition">✕ {lang === 'ar' ? 'إزالة' : 'Remove'}</button>
                         </div>
                       ) : (
                         <div>
-                          <div className="text-3xl mb-2">📎</div>
+                          <div className="mb-2 flex justify-center text-white/50"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-8 h-8"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></div>
                           <p className="text-white/50 text-sm font-semibold mb-1">{t.dragHere}</p>
                           <p className="text-white/25 text-xs">{t.uploadFormats}</p>
                         </div>
@@ -461,7 +479,7 @@ export default function BookButton({ activity }: BookButtonProps) {
                       disabled={submitting || !proofFile}
                       className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-red-500 font-black text-sm hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                     >
-                      {submitting ? <><span className="animate-spin">⟳</span> {t.submitting}</> : t.submit}
+                      {submitting ? <><span className="animate-spin inline-block"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></span> {t.submitting}</> : t.submit}
                     </button>
                   </div>
                 </>
@@ -470,11 +488,11 @@ export default function BookButton({ activity }: BookButtonProps) {
               {/* ── DONE ─────────────────────────────────────────────── */}
               {step === 'done' && (
                 <div className="text-center py-4">
-                  <div className="text-5xl mb-4">🎉</div>
+                  <div className="mb-4 flex justify-center text-green-500"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-12 h-12"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                   <h4 className="text-xl font-black text-white mb-3">{t.successTitle}</h4>
                   <p className="text-white/50 text-sm leading-relaxed mb-6">{t.successBody}</p>
                   <div className="bg-yellow-950/20 border border-yellow-800/30 rounded-xl p-3 mb-6">
-                    <span className="text-yellow-400 text-xs font-bold">⏳ {lang === 'ar' ? 'قيد المراجعة' : 'Under Review'}</span>
+                    <div className="text-yellow-400 text-xs font-bold flex items-center gap-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> {lang === 'ar' ? 'قيد المراجعة' : 'Under Review'}</div>
                     <p className="text-white/40 text-xs mt-1">{lang === 'ar' ? 'رقم الحجز: ' : 'Booking ID: '}<span className="font-mono text-white/60">{createdBookingId}</span></p>
                   </div>
                   <div className="flex gap-3">

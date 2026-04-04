@@ -85,9 +85,12 @@ function VideoModal({ src, poster, onClose }: { src: string; poster: string; onC
         />
         <button
           onClick={onClose}
-          className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/70 border border-white/15 text-white/60 hover:text-white"
+          className="absolute top-4 left-4 w-9 h-9 rounded-full bg-black/70 border border-white/15 text-white/60 hover:text-white flex items-center justify-center transition-colors duration-200"
+          aria-label="Close video"
         >
-          ✕
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="w-4 h-4">
+            <path d="M18 6 6 18M6 6l12 12" />
+          </svg>
         </button>
       </div>
     </div>
@@ -108,7 +111,6 @@ export default function OwnerSection() {
   const quote = String(t('owner.quote'));
   const quoteAuthor = String(t('owner.quoteAuthor'));
 
-  const [videoOpen, setVideoOpen] = useState(false);
   const [headerRef, headerVisible] = useInView(0.1);
   const [photoRef, photoVisible] = useInView(0.15);
   const [textRef, textVisible] = useInView(0.1);
@@ -150,13 +152,6 @@ export default function OwnerSection() {
               height={700}
               className="rounded-3xl"
             />
-
-            <button
-              onClick={() => setVideoOpen(true)}
-              className="mt-4 bg-red-600 px-4 py-2 rounded"
-            >
-              ▶
-            </button>
           </div>
 
           {/* Text */}
@@ -199,13 +194,6 @@ export default function OwnerSection() {
         </div>
       </div>
 
-      {videoOpen && (
-        <VideoModal
-          src="/assets/owner-vid.webm"
-          poster="/assets/owner.jpg"
-          onClose={() => setVideoOpen(false)}
-        />
-      )}
     </section>
   );
 }

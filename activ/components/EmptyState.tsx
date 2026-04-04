@@ -10,7 +10,7 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export default function EmptyState({ icon = '📭', title, message, actionLabel, onAction }: EmptyStateProps) {
+export default function EmptyState({ icon = <svg fill="none" stroke="currentColor" strokeWidth="1.5" className="w-12 h-12"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>, title, message, actionLabel, onAction }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center p-12 lg:p-20 text-center w-full bg-white/[0.02] border border-white/5 rounded-3xl animate-fadeIn">
       <div className="text-6xl mb-6 opacity-60">

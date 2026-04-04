@@ -13,6 +13,7 @@
     "myBookings": "My Bookings",
     "aiAnalyzer": "AI Analyzer",
     "coaches": "Coaches",
+    "heroes": "Heroes",
     "adminPanel": "Admin Panel",
     "profile": "Profile"
   },
@@ -22,7 +23,7 @@
     "button": "Explore Coaches →"
   },
   "hero": {
-    "title": "Building confident champions for a stronger future.",
+    "title": "Forging tomorrow's champions.. fitness, professionalism, and boundless passion.",
     "getStarted": "Get Started",
     "ourPrograms": "Our Programs"
   },
@@ -67,20 +68,23 @@
       "socialTitle": "Social Media",
       "pages": [
         "Home",
-        "About",
+        "Heroes",
+        "Coaches",
         "Programs",
+        "AI Analyzer",
+        "About Us",
         "Contact"
       ],
       "programs": [
-        "Sports Classes",
-        "Camps",
-        "Workshops",
-        "Private Training"
+        "Motor Rehabilitation",
+        "Bodybuilding",
+        "Gymnastics",
+        "Taekwondo",
+        "Swimming"
       ],
       "social": [
         "Facebook",
-        "Whatsapp",
-        "Instagram"
+        "Whatsapp"
       ]
     },
     "bottomLeft": "© 2026 Active Academy. All rights reserved.",
@@ -89,61 +93,64 @@
   "owner": {
     "sectionHeader": {
       "preTitle": "Our Founder",
-      "title": "John Doe\nProfessional Athlete & Coach"
+      "title": "Motor Rehabilitation Expert\n& Specialized Coach"
     },
-    "subHeader": "Founder & Coach",
-    "mainTitle": "Leading the way\nin sports excellence",
+    "subHeader": "Founder & Head Coach",
+    "mainTitle": "Motor Rehabilitation Expert\n& Specialized Coach",
     "paragraphs": [
-      "John has over 20 years of experience in professional sports.",
-      "He is passionate about training the next generation of athletes."
+      "Academic Background: Master's Researcher & Postgraduate Diploma in Sports Health Sciences — Alexandria University.",
+      "Training Specialization: First-Grade (A) Physical Education Coach, specialized in Taekwondo training, Gymnastics, and Bodybuilding.",
+      "Rehabilitation Expertise: Certified Motor Rehabilitation & Sports Injury Specialist, expert in Osteopathy and Chinese Medicine.",
+      "Professional Journey: Over 20 years of experience, including training Taekwondo at El-Mokawloon El-Arab Club and Hussein Gouda Academy.",
+      "Additional Skills: Specialist in manual therapy applications, cupping therapy, and acupuncture for sports injuries."
     ],
     "credentials": [
-      "Olympic Gold Medalist",
-      "Certified Fitness Trainer",
-      "Sports Nutrition Expert"
+      "Master's in Sports Health Sciences",
+      "Certified Motor Rehabilitation Specialist",
+      "Osteopathy & Chinese Medicine Expert"
     ],
     "stats": [
       {
-        "label": "Players Trained",
-        "value": "1200+"
-      },
-      {
         "label": "Years Experience",
-        "value": "20"
+        "value": "20+"
       },
       {
-        "label": "Certified Coaches",
-        "value": "15"
+        "label": "Sports Specialties",
+        "value": "4"
       },
       {
-        "label": "Countries Served",
-        "value": "8"
+        "label": "Rehab Cases",
+        "value": "500+"
+      },
+      {
+        "label": "Certifications",
+        "value": "6+"
       }
     ],
-    "quote": "Success comes from discipline and passion.",
-    "quoteAuthor": "John Doe"
+    "quote": "Sports are a science and an art; rehabilitation is the gateway back to life.",
+    "quoteAuthor": "Founder of Activ Academy"
   },
   "aboutUs": {
     "sectionLabel": "About Us",
-    "title": "Our Journey & Achievements",
-    "subtitle": "We aim to deliver excellence in every project we undertake.",
-    "journeyTitle": "Our Story",
+    "title": "World-Class Sports Training Academy",
+    "subtitle": "We discover and refine talents to forge stars that shine in the sports arena.",
+    "journeyTitle": "Our Journey with Champions",
     "journeyParagraphs": [
-      "Founded in 2020, our company has rapidly grown to become a leader in the tech industry.",
-      "We focus on innovation, quality, and customer satisfaction in all our services."
+      "Active Academy started with a clear vision: preparing a physically and mentally complete sports generation. We believe sports are not just training, but a lifestyle that builds character and boosts self-confidence.",
+      "Since our first day, we have successfully developed the skills of hundreds of players across all ages, through advanced training programs and internationally certified coaches, making us the top choice for pursuing athletic excellence."
     ],
     "features": [
       {
-        "icon": "⭐",
-        "text": "High Quality Service"
+        "icon": "star",
+        "text": "Certified Pro Training"
       },
       {
-        "icon": "🚀",
-        "text": "Fast Delivery"
+        "icon": "rocket",
+        "text": "Comprehensive Skill Development"
       },
       {
-        "icon": "💡",
-        "text": "Innovative Solutions"
+        "icon": "lightbulb",
+        "text": "Motivating Sports Environment"
       }
     ]
   },
@@ -163,6 +170,7 @@
   "recentBookings": {
     "title": "Recent Bookings",
     "noBookings": "No bookings yet.",
+    "empty": "No bookings yet.",
     "headers": {
       "userName": "User Name",
       "age": "Age",
@@ -171,29 +179,39 @@
       "coach": "Coach",
       "date": "Date",
       "time": "Time"
-    }
+    },
+    "table": {
+      "player": "Player",
+      "activity": "Activity",
+      "coach": "Coach",
+      "dateTime": "Date/Time",
+      "status": "Status"
+    },
+    "anonymous": "Anonymous",
+    "confirmed": "Confirmed",
+    "at": "at"
   },
   "statsGrid": {
     "stats": [
       {
         "label": "Total Players",
         "value": "120",
-        "icon": "👥"
+        "icon": "users"
       },
       {
         "label": "Active Sports",
         "value": "8",
-        "icon": "🏆"
+        "icon": "sports"
       },
       {
         "label": "New Bookings",
         "value": "15",
-        "icon": "📩"
+        "icon": "bookings"
       },
       {
         "label": "Revenue",
         "value": "$4,200",
-        "icon": "💰"
+        "icon": "revenue"
       }
     ]
   },
@@ -294,14 +312,16 @@
   },
   "sportsFilters": {
     "all": "All Sports",
-    "kung-fu": "Kung Fu",
-    "swimming": "Swimming",
-    "gymnastics": "Gymnastics"
+    "rehab": "Motor Rehabilitation",
+    "bodybuilding": "Bodybuilding",
+    "gymnastics": "Gymnastics",
+    "taekwondo": "Taekwondo",
+    "swimming": "Swimming"
   },
   "bookNow": {
     "bookNow": "Book Now",
     "booked": "Booked ✓",
-    "pending": "Under Review ⏳",
+    "pending": "Under Review",
     "rejected": "Rejected ✕",
     "popupTitle": "Book Your Activity",
     "stepInfo": "Your Info",
@@ -327,7 +347,7 @@
     "dragHere": "Drag file here or click to select",
     "submitting": "Submitting...",
     "submit": "Submit Booking",
-    "successTitle": "Booking Submitted! 🎉",
+    "successTitle": "Booking Submitted!",
     "successBody": "Your payment proof will be reviewed and booking confirmed within 24 hours.",
     "viewBookings": "View My Bookings",
     "close": "Close",
@@ -389,8 +409,11 @@
     "titleHighlight": "Coaches",
     "subtitle": "Professional, certified coaches dedicated to helping you achieve your athletic goals",
     "allCoaches": "All Coaches",
-    "swimming": "Swimming",
+    "rehab": "Motor Rehabilitation",
+    "bodybuilding": "Bodybuilding",
     "gymnastics": "Gymnastics",
+    "taekwondo": "Taekwondo",
+    "swimming": "Swimming",
     "martialArts": "Martial Arts",
     "clickDetails": "Click for details",
     "viewProfile": "View Profile →",
@@ -412,6 +435,7 @@
       "users": "Users",
       "sports": "Sports",
       "coaches": "Coaches",
+      "heroes": "Academy Heroes",
       "bookings": "Bookings"
     },
     "welcomeAdmin": "Welcome, {name}",
@@ -478,9 +502,9 @@
       "parentPhone": "Parent Phone"
     },
     "sports": {
-      "addActivity": "Add New Activity",
-      "editActivity": "Edit Activity",
-      "activityName": "Activity Name",
+      "addActivity": "Add New Sport",
+      "editActivity": "Edit Sport",
+      "activityName": "Sport Name",
       "coach": "Coach",
       "location": "Location",
       "category": "Category",
@@ -491,24 +515,24 @@
       "price": "Price (EGP)",
       "ageRange": "Age Range",
       "description": "Description",
-      "image": "Activity Image",
+      "image": "Sport Image",
       "cancel": "Cancel",
       "save": "Save Changes",
       "add": "Add",
-      "currentActivities": "Current Activities",
-      "noActivities": "No activities yet",
+      "currentActivities": "Current Sports",
+      "noActivities": "No sports yet",
       "edit": "Edit",
       "delete": "Delete",
       "priceUndetermined": "Price TBD",
-      "savingActivity": "Saving activity...",
+      "savingActivity": "Saving sport...",
       "uploadFailed": "Image upload failed",
-      "updateSuccess": "Activity updated successfully",
-      "addSuccess": "Activity added successfully",
+      "updateSuccess": "Sport updated successfully",
+      "addSuccess": "Sport added successfully",
       "saveError": "Error saving",
-      "deleteConfirm": "Are you sure you want to permanently delete this activity?",
+      "deleteConfirm": "Are you sure you want to permanently delete this sport?",
       "deleteSuccess": "Deleted successfully",
       "deleteError": "Error deleting",
-      "fetchError": "Could not fetch activities"
+      "fetchError": "Could not fetch sports"
     },
     "coaches": {
       "title": "Coaches Management",
@@ -536,6 +560,47 @@
       "saveError": "Error saving coach",
       "deleteError": "Error deleting coach",
       "image": "Image URL"
+    },
+    "heroes": {
+      "title": "Academy Heroes",
+      "subtitle": "Manage the academy's champion players and their titles",
+      "addHero": "Add Hero",
+      "editHero": "Edit Hero",
+      "name": "Name",
+      "sport": "Sport",
+      "bio": "Hero Bio",
+      "championships": "Championships",
+      "addChampionship": "Add Championship",
+      "championshipPlaceholder": "Championship name",
+      "image": "Hero Image",
+      "uploadImage": "Upload Image",
+      "noHeroes": "No Heroes Yet",
+      "noHeroesDesc": "Add your first hero to get started",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save",
+      "cancel": "Cancel",
+      "deleteConfirm": "Are you sure you want to delete this hero?",
+      "saveSuccess": "Hero saved successfully",
+      "deleteSuccess": "Hero deleted successfully",
+      "saveError": "Error saving hero",
+      "deleteError": "Error deleting hero"
     }
+  },
+  "heroes": {
+    "badge": "Our Champions",
+    "title": "Academy",
+    "titleHighlight": "Heroes",
+    "subtitle": "Meet the shining champions of our academy and the remarkable titles they've achieved",
+    "heroesCount": "Heroes",
+    "champCount": "Championships",
+    "championsshipsLabel": "Top Championships",
+    "noHeroes": "No heroes yet",
+    "noChampionships": "No championships recorded",
+    "viewAll": "View Details",
+    "more": "more",
+    "allChampionships": "All Championships",
+    "close": "Close",
+    "loading": "Loading heroes..."
   }
 }
