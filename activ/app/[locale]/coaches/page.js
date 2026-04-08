@@ -17,11 +17,11 @@ export default function CoachesPage() {
 
   const sports = [
     { id: 'all', label: t('allCoaches'), icon: <Users className="w-6 h-6" /> },
-    { id: 'سباحة', label: 'سباحة', icon: <Waves className="w-6 h-6" /> },
-    { id: 'تأهيل حركى', label: 'تأهيل حركى', icon: <Activity className="w-6 h-6" /> },
-    { id: 'كمال اجسام', label: 'كمال أجسام', icon: <Dumbbell className="w-6 h-6" /> },
-    { id: 'جمباز', label: 'جمباز', icon: <UserSquare2 className="w-6 h-6" /> },
-    { id: 'تايكوندو', label: 'تايكوندو', icon: <Medal className="w-6 h-6" /> },
+    { id: 'سباحة', label: t('swimming'), icon: <Waves className="w-6 h-6" /> },
+    { id: 'تأهيل حركى', label: t('rehab'), icon: <Activity className="w-6 h-6" /> },
+    { id: 'كمال اجسام', label: t('bodybuilding'), icon: <Dumbbell className="w-6 h-6" /> },
+    { id: 'جمباز', label: t('gymnastics'), icon: <UserSquare2 className="w-6 h-6" /> },
+    { id: 'تايكوندو', label: t('taekwondo'), icon: <Medal className="w-6 h-6" /> },
   ];
 
   useEffect(() => {
@@ -149,7 +149,7 @@ export default function CoachesPage() {
                 {/* Coach Info */}
                 <div className="p-6">
                   <h3 className="text-2xl font-black text-white mb-2">{coach.name}</h3>
-                  <p className="text-white/70 font-bold mb-3">{coach.title || coach.specialty || ''}</p>
+                  <p className="text-white/70 font-bold mb-3">{coach.title || sports.find(s => s.id === coach.specialty)?.label || coach.specialty || ''}</p>
                   <p className="text-gray-400 mb-4 line-clamp-2">
                     {coach.bio || ''}
                   </p>
@@ -217,7 +217,7 @@ export default function CoachesPage() {
                   )}
                 </div>
                 <h3 className="text-2xl font-black">{selectedCoach.name}</h3>
-                <p className="text-red-400 font-bold">{selectedCoach.title || selectedCoach.specialty}</p>
+                <p className="text-red-400 font-bold">{selectedCoach.title || sports.find(s => s.id === selectedCoach.specialty)?.label || selectedCoach.specialty}</p>
                 {selectedCoach.bio && <p className="text-white/60 mt-4 text-sm leading-relaxed">{selectedCoach.bio}</p>}
 
                 <div className="grid grid-cols-3 gap-3 mt-6">
@@ -246,21 +246,6 @@ export default function CoachesPage() {
           </motion.div>
         )}
 
-        {/* Join Our Team CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-20 bg-gradient-to-r from-red-950 to-black rounded-3xl p-12 text-center text-white"
-        >
-          <h2 className="text-4xl font-black mb-4">{t('joinTeamTitle')}</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-            {t('joinTeamSubtitle')}
-          </p>
-          <button className="px-8 py-4 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-lg rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all">
-            {t('applyNow')}
-          </button>
-        </motion.div>
       </div>
     </section>
   );

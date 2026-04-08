@@ -11,7 +11,7 @@
     "logout": "Log Out",
     "hello": "Hello, {name}",
     "myBookings": "My Bookings",
-    "aiAnalyzer": "AI Analyzer",
+    "aiAnalyzer": "Player Quality of Life Scale",
     "coaches": "Coaches",
     "heroes": "Heroes",
     "adminPanel": "Admin Panel",
@@ -71,7 +71,7 @@
         "Heroes",
         "Coaches",
         "Programs",
-        "AI Analyzer",
+        "Player Quality of Life Scale",
         "About Us",
         "Contact"
       ],

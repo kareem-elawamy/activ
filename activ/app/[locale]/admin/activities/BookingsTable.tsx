@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import api from '@/utils/api';
 import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
@@ -67,6 +68,12 @@ const SaveIcon = () => (
   </svg>
 );
 
+const TrashIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-4 h-4">
+    <path d="M3 6h18" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+  </svg>
+);
+
 export default function AdminBookingsTable() {
   const t = useTranslations('adminPanel.bookings');
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -87,6 +94,10 @@ export default function AdminBookingsTable() {
     } catch { toast.error(t('failedLoad')); }
     finally { setLoading(false); }
   };
+
+  const params = useParams();
+  const lang = params?.locale || 'ar';
+  const isAr = lang === 'ar';
 
   useEffect(() => { fetchBookings(); }, []);
 
@@ -109,6 +120,19 @@ export default function AdminBookingsTable() {
       toast.success(status === 'approved' ? t('approveSuccess') : t('rejectSuccess'));
     } catch (err: any) {
       toast.error(err.response?.data?.message || t('actionError'));
+    } finally { setSaving(false); }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!window.confirm(isAr ? 'هل أنت متأكد أنك تريد حذف هذا الحجز نهائياً؟' : 'Are you sure you want to completely delete this booking?')) return;
+    setSaving(true);
+    try {
+      await api.delete(`/booking/${id}`);
+      setBookings(prev => prev.filter(b => b._id !== id));
+      setSelectedBooking(null);
+      toast.success(isAr ? 'تم حذف الحجز بنجاح' : 'Booking deleted successfully');
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || 'Failed to delete booking');
     } finally { setSaving(false); }
   };
 
@@ -135,7 +159,7 @@ export default function AdminBookingsTable() {
     const matchesSport = sportFilter === 'all' || b.activityName === sportFilter;
     return matchesStatus && matchesSport;
   });
-  
+
   const uniqueSports = Array.from(new Set(bookings.map(b => b.activityName))).filter(Boolean);
   const counts = {
     all: bookings.length,
@@ -167,8 +191,8 @@ export default function AdminBookingsTable() {
             return (
               <button key={f} onClick={() => setFilter(f)}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold border transition-all ${filter === f
-                    ? 'bg-red-600/15 border-red-600/30 text-red-400'
-                    : 'bg-white/[0.03] border-white/[0.07] text-white/40 hover:text-white/70 hover:bg-white/[0.05]'
+                  ? 'bg-red-600/15 border-red-600/30 text-red-400'
+                  : 'bg-white/[0.03] border-white/[0.07] text-white/40 hover:text-white/70 hover:bg-white/[0.05]'
                   }`}
               >
                 {meta && <span className={`w-1.5 h-1.5 rounded-full ${filter === f ? meta.dot : 'bg-white/20'}`} />}
@@ -178,7 +202,7 @@ export default function AdminBookingsTable() {
             );
           })}
           <div className="flex-1" />
-          
+
           {/* Sport Filter Dropdown */}
           <div className="relative">
             <select
@@ -229,8 +253,8 @@ export default function AdminBookingsTable() {
                         key={b._id}
                         onClick={() => openPanel(b)}
                         className={`cursor-pointer transition-colors group ${selectedBooking?._id === b._id
-                            ? 'bg-red-950/20'
-                            : 'hover:bg-white/[0.02]'
+                          ? 'bg-red-950/20'
+                          : 'hover:bg-white/[0.02]'
                           }`}
                       >
                         <td className="px-5 py-4">
@@ -409,6 +433,14 @@ export default function AdminBookingsTable() {
                     {t('reject')}
                   </button>
                 </div>
+
+                <button
+                  onClick={() => handleDelete(selectedBooking._id)}
+                  disabled={saving}
+                  className="w-full mt-2 py-3 rounded-xl bg-black hover:bg-red-950/40 border border-white/5 hover:border-red-900/50 text-red-500 font-bold text-[10px] uppercase tracking-widest transition flex items-center justify-center gap-2"
+                >
+                  <TrashIcon /> {isAr ? 'حذف الحجز نهائياً' : 'Delete Booking Permanently'}
+                </button>
               </div>
             </div>
           </div>

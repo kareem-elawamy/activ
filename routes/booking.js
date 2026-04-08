@@ -6,7 +6,6 @@ const Payment = require("../models/Payment");
 const authMiddleware = require("../middleware/authMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 
-// ✅ CREATE booking (Atomic Slot Deduction - Task 12.3)
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { workoutId, date, userFullName, userPhone, nationalId, traineeName, parentName, parentPhone, paymentMethod, walletType, proofUrl } = req.body;
@@ -24,8 +23,6 @@ router.post("/", authMiddleware, async (req, res) => {
       });
     }
 
-    // 2️⃣ ATOMIC slot deduction — eliminates race conditions
-    // Only decrements if slots > 0. Returns null if workout doesn't exist OR slots are 0.
     const workout = await Workout.findOneAndUpdate(
       { _id: workoutId, slots: { $gt: 0 } },
       { $inc: { slots: -1 } },
@@ -36,7 +33,6 @@ router.post("/", authMiddleware, async (req, res) => {
       return res.status(400).json({ message: "No available slots or workout not found" });
     }
 
-    // 3️⃣ Create the booking (slot is already secured atomically)
     const booking = new Booking({
       user: req.user.id,
       workout: workoutId,
@@ -62,7 +58,6 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ GET my bookings
 router.get("/my", authMiddleware, async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user.id })
@@ -74,15 +69,13 @@ router.get("/my", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ GET all bookings (Admin Only) (Task 13.1 / Phase 9)
 router.get("/", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
     const bookings = await Booking.find()
       .populate("workout")
-      .populate("user", "name email phone") // Ensure user payload provides contact strings
+      .populate("user", "name email phone")
       .sort({ createdAt: -1 });
 
-    // Transform into frontend representation structure safely
     const formatted = bookings.map(b => ({
       _id: b._id,
       activityName: b.workout?.title || b.workout?.name || 'Unknown Activity',
@@ -92,17 +85,14 @@ router.get("/", [authMiddleware, adminMiddleware], async (req, res) => {
       userPhone: b.userPhone || b.user?.phone,
       userEmail: b.user?.email,
       userAge: b.userAge,
-      // Trainee/Parent metadata
       traineeName: b.traineeName,
       parentName: b.parentName,
       parentPhone: b.parentPhone,
       nationalId: b.nationalId,
-      // Activity details
       coach: b.workout?.coach,
       date: b.workout?.date,
       time: b.workout?.time,
       location: b.workout?.location,
-      // Payment & Status
       paymentMethod: b.paymentMethod || 'receipt',
       walletType: b.walletType,
       proofUrl: b.proofUrl,
@@ -120,7 +110,6 @@ router.get("/", [authMiddleware, adminMiddleware], async (req, res) => {
   }
 });
 
-// ❌ Cancel booking
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const booking = await Booking.findById(req.params.id);
@@ -128,7 +117,8 @@ router.delete("/:id", authMiddleware, async (req, res) => {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    if (booking.user.toString() !== req.user.id) {
+    // Allow user to delete their own, OR allow an admin.
+    if (booking.user.toString() !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ message: "Not authorized" });
     }
 
@@ -145,17 +135,14 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ PUT update booking status + Admin Rules (Phase 7.1)
 router.put("/:id/status", [authMiddleware, adminMiddleware], async (req, res) => {
   try {
     const { status, approvedPrice, adminNote } = req.body;
     
-    // Rule 1: Approved bookings MUST have an approvedPrice
     if (status === "approved" && (approvedPrice === undefined || approvedPrice === null || approvedPrice === '')) {
       return res.status(400).json({ message: "An approvedPrice must be provided to approve a booking." });
     }
 
-    // Rule 2: Rejected bookings MUST have an adminNote
     if (status === "rejected" && (!adminNote || adminNote.trim() === '')) {
       return res.status(400).json({ message: "An adminNote explaining the reason is required to reject a booking." });
     }
@@ -173,21 +160,16 @@ router.put("/:id/status", [authMiddleware, adminMiddleware], async (req, res) =>
 
     await booking.save();
 
-    // Rule 3: Automatically complete Payment if status is approved and payment method exists
     const payment = await Payment.findOne({ booking: booking._id });
     
     if (status === "approved" && payment && payment.status !== "completed") {
       payment.status = "completed";
-      payment.amount = approvedPrice; // Ensure pricing syncs to payment
+      payment.amount = approvedPrice;   
       await payment.save();
     } else if (status === "rejected" && payment && payment.status !== "failed") {
-      // Mark payment as failed if rejected
       payment.status = "failed";
       await payment.save();
     }
-
-    // Rule 4: Refund slot back to the workout when booking is REJECTED
-    // Only refund if transitioning TO rejected (not if already rejected — prevents double refund)
     if (status === "rejected" && previousStatus !== "rejected") {
       await Workout.findByIdAndUpdate(booking.workout, { $inc: { slots: 1 } });
     }
@@ -196,6 +178,64 @@ router.put("/:id/status", [authMiddleware, adminMiddleware], async (req, res) =>
 
   } catch (err) {
     console.log("UPDATE BOOKING STATUS ERROR ❌", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.put("/:id/retry-payment", authMiddleware, async (req, res) => {
+  try {
+    const { paymentMethod, walletType, proofUrl } = req.body;
+    
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    
+    if (booking.user.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+    if (booking.status !== "rejected") {
+      return res.status(400).json({ message: "Only rejected bookings can be retried." });
+    }
+    
+    const workout = await Workout.findOneAndUpdate(
+      { _id: booking.workout, slots: { $gt: 0 } },
+      { $inc: { slots: -1 } },
+      { new: true }
+    );
+    
+    if (!workout) {
+      return res.status(400).json({ message: "Sorry, the slots for this activity are currently full." });
+    }
+    
+    booking.status = "pending";
+    booking.paymentStatus = "proof_submitted";
+    booking.adminNote = ""; 
+    booking.paymentMethod = paymentMethod || booking.paymentMethod;
+    booking.walletType = walletType || booking.walletType;
+    booking.proofUrl = proofUrl || booking.proofUrl;
+    
+    await booking.save();
+    
+    const existingPayment = await Payment.findOne({ booking: booking._id });
+    if (existingPayment) {
+      existingPayment.status = "pending";
+      existingPayment.method = paymentMethod || existingPayment.method;
+      existingPayment.receiptUrl = proofUrl || existingPayment.receiptUrl;
+      await existingPayment.save();
+    } else {
+      const newPayment = new Payment({
+        user: req.user.id,
+        booking: booking._id,
+        amount: booking.approvedPrice || workout.price || 0,
+        method: paymentMethod || booking.paymentMethod,
+        receiptUrl: proofUrl,
+        status: "pending"
+      });
+      await newPayment.save();
+    }
+    
+    res.json({ message: "Booking resubmitted successfully!", booking });
+  } catch (err) {
+    console.log("RETRY PAYMENT ERROR ❌", err);
     res.status(500).json({ message: "Server error" });
   }
 });
